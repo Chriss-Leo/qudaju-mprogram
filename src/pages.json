@@ -1,0 +1,54 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "趣搭局" }
+    },
+    {
+      "path": "pages/search/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "搜索服务" }
+    },
+    {
+      "path": "pages/service-detail/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "服务详情" }
+    },
+    {
+      "path": "pages/order-submit/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "确认订单" }
+    },
+    {
+      "path": "pages/order-detail/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "订单详情" }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "个人中心" }
+    },
+    {
+      "path": "pages/provider/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "服务者中心" }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "趣搭局",
+    "navigationBarBackgroundColor": "#F2F4EF",
+    "backgroundColor": "#F2F4EF"
+  },
+	"condition" : {//Mode configuration, effective only during development period.
+		"current": 0,//Current active mode (index entry of list)
+		"list": [
+			{
+				"name": "",//mode name
+				"path": "",//startup page, can not be empty
+				"query": ""//The startup parameters are obtained in the onLoad function of the page.
+			}
+		]
+	}
+}

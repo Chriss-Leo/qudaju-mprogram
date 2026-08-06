@@ -1,0 +1,57 @@
+{
+  "title": "选择趣搭局的新视觉世界",
+  "question": "保留森林绿与珊瑚橙，哪套视觉语言最适合趣搭局？",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "城市活动海报墙",
+      "kicker": "推荐方向",
+      "lineage": "城市跑团海报、独立活动票券与周末刊物",
+      "thesis": "把每项服务当作一场值得赴约的城市活动，而不是一件普通商品。",
+      "palette": ["#153F35", "#EF644A", "#F3F5F0", "#B8CFBF"],
+      "materials": ["自然纪实摄影", "大字号标题", "票券式信息条"],
+      "viewport": "首屏用一张强摄影建立场景，搜索与位置压缩成一条工具栏，分类像活动索引，服务以纵向摄影卡自然进入内容流。",
+      "risk": "摄影质量不足时会失去全部高级感，因此必须生成并维护统一素材。",
+      "sketch": ".impeccable/sketches/assigned.png"
+    },
+    {
+      "id": "challenger-archive",
+      "label": "服务档案盒",
+      "kicker": "挑战方向",
+      "lineage": "球鞋档案墙与纸盒端标",
+      "thesis": "每项服务拥有清晰编号、标签和可抽出的详情层，像收藏一套城市体验。",
+      "case": "信息组织很强，但纸盒隐喻可能让服务显得过于商品化。",
+      "palette": ["#173F34", "#D96643", "#F7F5EF", "#232724"],
+      "materials": ["纸板标签", "黑色线稿", "规格网格"],
+      "viewport": "首页是一面纵向服务档案架，筛选直接改变架上标签，点击后内容像抽屉展开。",
+      "risk": "隐喻过强会压低生活服务的人情味。",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-sneaker-box-stacks-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-sneaker-box-stacks.webp",
+      "sketch": ".impeccable/sketches/challenger-archive.webp"
+    },
+    {
+      "id": "challenger-grid",
+      "label": "城市构成网格",
+      "kicker": "挑战方向",
+      "lineage": "Crouwel 构成海报与城市导视系统",
+      "thesis": "用清晰网格、巨型类别字和路线感排版组织丰富服务。",
+      "case": "产品清晰度高，但需要谨慎控制实验字体，避免影响中文阅读。",
+      "palette": ["#F4F6F2", "#16483A", "#F16446", "#A9C7B5"],
+      "materials": ["构成网格", "几何色块", "导视编号"],
+      "viewport": "首屏由位置、搜索和两块非对称服务入口组成，分类沿网格排列，推荐内容用大图与窄信息栏交错。",
+      "risk": "构成感过强时容易变成海报，削弱日常操作效率。",
+      "hero": "https://impeccable.style/worlds/cards/crouwel-grid-specimen-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/crouwel-grid-specimen.webp",
+      "sketch": ".impeccable/sketches/challenger-grid.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "精品生活服务标准版",
+    "thesis": "不使用强隐喻，按成熟生活服务应用的方式做到摄影、排版和交互都足够精致。",
+    "viewport": "顶部位置与搜索，分类入口，双列摄影服务流，底部导航。",
+    "sketch": ".impeccable/sketches/canon.webp"
+  },
+  "steer": true
+}

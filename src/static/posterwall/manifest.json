@@ -1,0 +1,54 @@
+{
+  "collection": "home-posterwall-b",
+  "generatedWith": "OpenAI imagegen built-in",
+  "assets": [
+    {
+      "file": "hero-frisbee.jpg",
+      "role": "Home hero event photography",
+      "crop": {
+        "width": 1200,
+        "height": 900,
+        "aspectRatio": "4:3",
+        "fit": "cover"
+      },
+      "prompt": "Use case: photorealistic-natural\nAsset type: mini-program hero event photography\nPrimary request: candid documentary photograph of young Chinese adults playing flying disc together in a Shanghai city park\nScene/backdrop: open green lawn in a Shanghai park, leafy trees and a subtle recognizable Shanghai urban skyline in the distance, authentic everyday weekend atmosphere\nSubject: a mixed group of five young Chinese adults in casual unbranded sportswear; one player caught mid-throw while friends react naturally\nStyle/medium: photorealistic editorial documentary photography, believable people, real skin and fabric texture, subtle film grain\nComposition/framing: landscape 4:3 frame, energetic medium-wide eye-level moment, full disc visible, foreground action with the group and city context behind, safe crop around all important subjects\nLighting/mood: soft bright overcast daylight, spontaneous, social, optimistic, natural color\nConstraints: no text, no logos, no trademarks, no watermark; no readable signs; no embedded graphic design; anatomically believable hands and faces; suitable for cropping to 1200x900\nAvoid: staged advertising poses, glossy commercial retouching, exaggerated saturation, synthetic CGI look",
+      "syntheticDemo": true
+    },
+    {
+      "file": "city-photo-walk.jpg",
+      "role": "Photography companion activity ticket",
+      "crop": {
+        "width": 1000,
+        "height": 800,
+        "aspectRatio": "5:4",
+        "fit": "center crop"
+      },
+      "prompt": "Use case: photorealistic-natural\nAsset type: mini-program activity ticket photography\nPrimary request: candid documentary photograph of a young Chinese woman taking a photograph on a historic Shanghai street\nScene/backdrop: quiet Shanghai historic street with plane trees, warm-toned brick and stucco lane-house facades, lived-in urban detail, no identifiable storefront brands\nSubject: one young Chinese woman in casual unbranded clothing holding a real mirrorless camera to her eye, absorbed in composing a street photograph\nStyle/medium: photorealistic natural-light editorial documentary photography, authentic skin, hair, fabric, architecture, subtle film grain\nComposition/framing: landscape 4:3 frame, waist-up to three-quarter view, subject slightly off center with street depth and architectural context, safe crop around hands and camera\nLighting/mood: gentle late-morning natural light, calm, observant, warm but realistic color\nConstraints: no text, no logos, no trademarks, no watermark; no readable signs; no embedded typography or graphic elements; anatomically believable hands and camera; suitable for cropping to 1000x800\nAvoid: fashion-editorial posing, tourist cliché, heavy cinematic grading, artificial bokeh, synthetic CGI look",
+      "syntheticDemo": true
+    },
+    {
+      "file": "boardgame-night.jpg",
+      "role": "Board-game gathering activity ticket",
+      "crop": {
+        "width": 1000,
+        "height": 800,
+        "aspectRatio": "5:4",
+        "fit": "center crop"
+      },
+      "prompt": "Use case: photorealistic-natural\nAsset type: mini-program activity ticket photography\nPrimary request: candid documentary photograph of a small group of young Chinese adults playing modern board games together in a warm local venue\nScene/backdrop: cozy independent community game room with warm wood tables, shelves and practical pendant lights; all boxes and cards generic and unbranded\nSubject: four young Chinese adults gathered closely around a tabletop strategy game, laughing and discussing a move naturally, hands interacting plausibly with colorful generic pieces\nStyle/medium: photorealistic lifestyle documentary photography, realistic skin and fabric texture, intimate local atmosphere, subtle film grain\nComposition/framing: landscape 4:3 frame, eye-level medium-wide view across the table, clear faces and game interaction, safe crop around all key subjects\nLighting/mood: warm practical evening light balanced with natural skin tones, friendly, relaxed, welcoming\nConstraints: no text, no logos, no trademarks, no watermark; no readable text on cards or boxes; no embedded graphic design; anatomically believable hands and faces; suitable for cropping to 1000x800\nAvoid: casino imagery, drinking focus, staged advertising pose, neon cyberpunk color, synthetic CGI look",
+      "syntheticDemo": true
+    },
+    {
+      "file": "outdoor-walk.jpg",
+      "role": "Outdoor waterfront walk activity ticket",
+      "crop": {
+        "width": 1000,
+        "height": 800,
+        "aspectRatio": "5:4",
+        "fit": "center crop"
+      },
+      "prompt": "Use case: photorealistic-natural\nAsset type: mini-program activity ticket photography\nPrimary request: candid documentary photograph of Chinese young adult friends on an urban waterfront sunset walk\nScene/backdrop: broad Shanghai-style riverside promenade with contemporary skyline shapes and water, subtle city context without readable building signage\nSubject: four Chinese friends walking together beside the water, mid-conversation, relaxed natural gestures, casual unbranded weekend clothing\nStyle/medium: photorealistic editorial documentary photography, real skin and fabric texture, authentic urban life, subtle film grain\nComposition/framing: landscape 4:3 frame, medium-wide side-three-quarter view with walking figures and open waterfront, safe crop around full upper bodies and skyline\nLighting/mood: soft golden-hour sunset light, gentle breeze, sociable and reflective, natural restrained color\nConstraints: no text, no logos, no trademarks, no watermark; no readable signs; no embedded typography or graphic elements; anatomically believable faces and hands; suitable for cropping to 1000x800\nAvoid: staged influencer pose, overly dramatic orange sky, luxury advertising polish, heavy HDR, synthetic CGI look",
+      "syntheticDemo": true
+    }
+  ]
+}
