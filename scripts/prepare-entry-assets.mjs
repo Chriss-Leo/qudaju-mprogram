@@ -1,13 +1,8 @@
-// Export only the Phosphor glyphs used on the entry surface.
+// Export only the Phosphor glyphs used by the fixed navigation.
 import fs from "node:fs";
 import path from "node:path";
 const { icons, width, height } = JSON.parse(fs.readFileSync("node_modules/@iconify-json/ph/icons.json", "utf8"));
 const targets = {
-  cards: ["cards", "#fffdf6"],
-  camera: ["camera", "#fffdf6"],
-  signpost: ["signpost", "#fffdf6"],
-  mountains: ["mountains", "#fffdf6"],
-  users: ["users", "#fffdf6"],
   home: ["house-fill", "#153f35"],
   "home-muted": ["house-fill", "#73826f"],
   profile: ["user", "#153f35"],

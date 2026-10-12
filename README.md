@@ -1,56 +1,23 @@
 # 趣搭局小程序
 
-基于 uni-app、Vue 3、TypeScript 和 Vite 搭建的趣搭局 MVP 小程序端。当前实现以 `qudaju-ui` 的页面设计稿为依据，包含可交互的首页筛选与核心交易页面。
+同城兴趣组局平台。技术栈：uni-app + Vue 3 + TypeScript + Vite。
 
-## 已实现页面
+## 文档入口
 
-- 首页：分类、附近优选、位置选择、排序和筛选抽屉
-- 搜索结果：关键词搜索、排序、快速筛选和无结果状态
-- 服务详情：服务者信息、服务说明、保障、档期、评价和预约入口
-- 确认订单：预约信息、联系方式、留言、平台支付适配入口
-- 订单详情：接单状态、履约进度、订单信息、安全提示和售后入口
-- 个人中心：订单快捷入口、收藏评价、客服和服务者中心入口
-- 服务者中心：经营数据、常用功能、待接单处理
+- [产品方案](PRODUCT.md)：功能范围、报名与聊天规则。
+- [设计规范](DESIGN.md)：当前确认的视觉与布局。
+- [开发指南](docs/DEVELOPMENT.md)：运行、构建、目录和平台差异。
+- [实现进展](docs/STATUS.md)：已实现、待重构和待开发。
+- [素材说明](docs/ASSETS.md)：图片、字体、图标与授权。
+- [清理记录](docs/CLEANUP.md)：移除范围及恢复位置。
 
-## 平台目录
-
-平台差异能力统一放在 `src/platforms`：
-
-- `src/platforms/wechat`：微信小程序
-- `src/platforms/alipay`：支付宝小程序
-- `src/platforms/xhs`：小红书小程序
-
-支付、客服、登录、分享等平台 API 后续只在适配层实现，页面通过统一接口调用。
-
-## 本地运行
+## 快速运行
 
 ```bash
-npm install
+npm ci
 npm run dev:h5
 ```
 
-## 构建
+打开终端输出的本地地址。微信使用 `npm run build:mp-weixin`，在开发者工具导入 `dist/build/mp-weixin`。AppID 在 `src/manifest.json` 配置；本地工具配置保留在项目根目录。
 
-```bash
-npm run build:h5
-npm run build:mp-weixin
-npm run build:mp-alipay
-npm run build:mp-xhs
-```
-
-对应产物位于：
-
-- `dist/build/h5`
-- `dist/build/mp-weixin`
-- `dist/build/mp-alipay`
-- `dist/build/mp-xhs`
-
-导入相应平台开发者工具前，需要先在 `src/manifest.json` 配置各平台 App ID。
-
-## 检查
-
-```bash
-npm run type-check
-```
-
-当前页面使用本地示例数据，支付、客服、认证和提现入口为演示状态，已保留平台适配接口。
+当前可用：首页固定摄影入口、组局列表、筛选、微信原生省市区选择。数据是本地示例；发布、真实报名、支付与聊天未接入。详情等旧服务页面仍被引用，尚未按新产品重构。
