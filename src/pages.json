@@ -8,7 +8,11 @@
   "pages": [
     {
       "path": "pages/index/index",
-      "style": { "navigationStyle": "custom", "navigationBarTitleText": "趣搭局" }
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "趣搭局", "navigationBarTextStyle": "white", "disableScroll": true }
+    },
+    {
+      "path": "pages/groups/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "同城好局", "navigationBarTextStyle": "black", "disableScroll": true }
     },
     {
       "path": "pages/search/index",

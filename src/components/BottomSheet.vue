@@ -36,4 +36,9 @@ const emit = defineEmits<{ close: [] }>();
 .sheet__header { height: 72rpx; display: flex; align-items: center; justify-content: space-between; }
 .sheet__title { color: #153f35; font-size: 34rpx; font-weight: 900; }
 .sheet__close { width: 58rpx; height: 58rpx; padding: 0; border: 2rpx solid #c8d2ca; border-radius: 12rpx; background: #f3f5f0; color: #153f35; font-size: 38rpx; line-height: 52rpx; }
+/* #ifdef H5 */
+@media (min-width: 600px) {
+  .sheet { left: 50%; right: auto; width: 960px; max-height: calc(84vh / var(--qudaju-preview-scale, 1)); transform: translateX(-50%) scale(var(--qudaju-preview-scale, 1)); transform-origin: bottom center; }
+}
+/* #endif */
 </style>

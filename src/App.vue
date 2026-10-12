@@ -54,6 +54,9 @@ button[disabled] { opacity: 0.48; }
 ::selection { color: #fffdf6; background: #ef644a; }
 
 @media (min-width: 600px) {
+  /* uni H5 compiles rpx to rem against a 375px canvas. Match the 960px
+     layout before the existing 430/960 preview transform, not twice-shrink. */
+  html { font-size: 40.96px !important; }
   html,
   body {
     overflow-x: hidden;

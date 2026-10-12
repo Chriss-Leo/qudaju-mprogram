@@ -1,0 +1,10 @@
+# 城市漫步入口第二版
+
+使用内置图像生成工具编辑用户提供的原图，仅更新设计稿。
+
+Edit the attached city-walk 趣搭局 full-screen mobile homepage EXACTLY as requested. Preserve the exact photograph, central smiling woman's identity, companions, sunlight, tree-lined street, framing, resolution/aspect ratio, top playful 趣搭局 logo with orange accent, iOS status bar, main headline “今天，\n找点好玩的。” and subtitle “同城兴趣服务”. Change ONLY these UI elements:
+1. Completely remove the outlined location pill 上海·静安 and its pin below logo, reconstruct photographic foliage seamlessly. No location anywhere.
+2. Completely remove orange ticket button “进入趣搭局” and arrow. Restore backpack and clothing photo beneath seamlessly. No replacement CTA, no added categories.
+3. Move “向上探索更多” and its upward chevron toward LEFT, aligned to left edge of headline (~52px). Enlarge both: text ~32px instead of existing tiny 20px, chevron width ~38px with crisp 2px ivory stroke. Place this hint around y1530–1620, with white text first and centered-under-text upward chevron. Do not center it on whole page, do not shift headline.
+4. Redesign bottom navigation: keep original three-column layout and overall bottom bar height ~155px, ivory home and profile icons/labels on a DEEP FOREST GREEN theme fill (#123d2d), no white nav background. Replace central orders clipboard and text 订单 with a prominent circular plus action, label EXACTLY “发现”. Use a filled CORAL-ORANGE brand accent circle ~76px diameter with white plus, subtle ivory ring, center slightly raised above neighboring icon centers; label 发现 ivory and readable. Home icon wide filled house in ivory, label 首页; right person outline sage-ivory, label 我的. At top edge of bottom nav add a delicate warm-ivory thin continuous outline/dividing LINE following its rounded upper corners and subtly arcing up around central plus; visually separates nav from photograph without a thick opaque band or heavy shadow. Maintain bottom safe area and high legibility. Circle-plus is prominent but tasteful. Do not write 发起; use 发现.
+No red annotations or scribbles, no additional content, no night scene, no changes to headline/branding/person/photo. Output only one polished portrait screen.
