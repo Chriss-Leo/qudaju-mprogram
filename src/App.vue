@@ -28,9 +28,9 @@ onLaunch(() => {
 <style lang="scss">
 page {
   min-height: 100%;
-  background: #f3f5f0;
-  color: #153f35;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: $color-compatF3F5F0;
+  color: $color-text;
+  font-family: $font-body;
 }
 
 view,
@@ -51,16 +51,16 @@ textarea { font-family: inherit; }
 
 button[disabled] { opacity: 0.48; }
 
-::selection { color: #fffdf6; background: #ef644a; }
+::selection { color: $color-inverseWarm; background: $color-accent; }
 
 @media (min-width: 600px) {
   /* uni H5 compiles rpx to rem against a 375px canvas. Match the 960px
      layout before the existing 430/960 preview transform, not twice-shrink. */
-  html { font-size: 40.96px !important; }
+  html { font-size: $font-size-previewRoot !important; }
   html,
   body {
     overflow-x: hidden;
-    background: #dce3dd;
+    background: $color-compatDCE3DD;
   }
 
   uni-app {
@@ -71,8 +71,8 @@ button[disabled] { opacity: 0.48; }
     min-height: var(--qudaju-preview-layout-height, 100vh);
     transform: scale(var(--qudaju-preview-scale, 1)) translateX(-50%);
     transform-origin: top left;
-    background: #f3f5f0;
-    box-shadow: 0 0 52px rgba(21, 63, 53, 0.16);
+    background: $color-compatF3F5F0;
+    box-shadow: 0 0 52px $color-compatOverlay1;
   }
 }
 </style>

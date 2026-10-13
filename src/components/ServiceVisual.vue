@@ -18,9 +18,9 @@ const images = {
 </template>
 
 <style scoped lang="scss">
-.visual { position: relative; width: 100%; height: 286rpx; overflow: hidden; background: #9aaf9f; }
-.visual--compact { height: 220rpx; border-radius: 12rpx; }
+.visual { position: relative; width: 100%; height: 286rpx; overflow: hidden; background: $color-iconMuted; }
+.visual--compact { height: 220rpx; border-radius: $radius-v12rpx; }
 .visual__photo { width: 100%; height: 100%; display: block; }
-.visual__wash { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(11, 45, 35, .62)); }
-.visual__badge { position: absolute; left: 17rpx; bottom: 15rpx; padding: 8rpx 13rpx; color: #153f35; background: #b8cfbf; font-size: 19rpx; font-weight: 800; transform: rotate(-1.5deg); }
+.visual__wash { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, $color-compatOverlay4); }
+.visual__badge { position: absolute; left: 17rpx; bottom: 15rpx; padding: 8rpx 13rpx; color: $color-text; background: $color-ivory; font-size: $font-size-v19rpx; font-weight: $font-weight-v800; transform: rotate(-1.5deg); }
 </style>

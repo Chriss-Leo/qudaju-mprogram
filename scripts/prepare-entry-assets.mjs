@@ -2,12 +2,13 @@
 import fs from "node:fs";
 import path from "node:path";
 const { icons, width, height } = JSON.parse(fs.readFileSync("node_modules/@iconify-json/ph/icons.json", "utf8"));
+const { colors } = JSON.parse(fs.readFileSync("src/theme/tokens.json", "utf8"));
 const targets = {
-  home: ["house-fill", "#153f35"],
-  "home-muted": ["house-fill", "#73826f"],
-  profile: ["user", "#153f35"],
-  "profile-muted": ["user", "#73826f"],
-  plus: ["plus", "#fffdf6"],
+  home: ["house-fill", colors.primary],
+  "home-muted": ["house-fill", colors.iconMuted],
+  profile: ["user", colors.primary],
+  "profile-muted": ["user", colors.iconMuted],
+  plus: ["plus", colors.inverseWarm],
 };
 for (const [file, [name, color]] of Object.entries(targets)) {
   const icon = icons[name];

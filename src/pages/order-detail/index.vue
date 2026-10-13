@@ -56,55 +56,55 @@ function demo(message: string) {
       <view @tap="demo('订单投诉入口已预留')"><text>投诉与申诉</text><text>›</text></view>
     </view>
 
-    <AppTabBar active="orders" />
+    <AppTabBar active="orders" owner-route="pages/order-detail/index" />
   </view>
 </template>
 
 <style scoped lang="scss">
 .order-page { min-height: 100vh; padding: calc(46rpx + env(safe-area-inset-top)) 34rpx 170rpx; }
-.top-nav { height: 72rpx; display: grid; grid-template-columns: 64rpx 1fr 64rpx; align-items: center; text-align: center; font-size: 32rpx; font-weight: 800; }
-.top-nav button { width: 64rpx; height: 64rpx; margin: 0; padding: 0; border-radius: 50%; background: #e8ece7; }
-.back view { width: 19rpx; height: 19rpx; margin: 20rpx 0 0 25rpx; border: 4rpx solid #263129; border-top: 0; border-right: 0; transform: rotate(45deg); }
+.top-nav { height: 72rpx; display: grid; grid-template-columns: 64rpx 1fr 64rpx; align-items: center; text-align: center; font-size: $font-size-v32rpx; font-weight: $font-weight-v800; }
+.top-nav button { width: 64rpx; height: 64rpx; margin: 0; padding: 0; border-radius: $radius-v50percent; background: $color-compatE8ECE7; }
+.back view { width: 19rpx; height: 19rpx; margin: 20rpx 0 0 25rpx; border: 4rpx solid $color-compat263129; border-top: 0; border-right: 0; transform: rotate(45deg); }
 .chat { position: relative; }
-.chat view:first-child { position: absolute; width: 30rpx; height: 24rpx; left: 15rpx; top: 16rpx; border: 4rpx solid #263129; border-radius: 10rpx; }
-.chat view:last-child { position: absolute; width: 10rpx; height: 10rpx; left: 20rpx; top: 39rpx; border: 4rpx solid #263129; border-top: 0; border-right: 0; transform: rotate(-20deg); }
-.status-panel { min-height: 180rpx; margin-top: 28rpx; padding: 34rpx; display: flex; align-items: center; gap: 24rpx; border-radius: 34rpx; color: #fff; background: #173f34; }
-.status-panel__icon { width: 72rpx; height: 72rpx; display: grid; place-items: center; border-radius: 24rpx; background: rgba(255,255,255,.13); }
-.status-panel__icon view { width: 38rpx; height: 38rpx; display: grid; place-items: center; border: 4rpx solid #fff; border-radius: 50%; font-size: 22rpx; }
+.chat view:first-child { position: absolute; width: 30rpx; height: 24rpx; left: 15rpx; top: 16rpx; border: 4rpx solid $color-compat263129; border-radius: $radius-v10rpx; }
+.chat view:last-child { position: absolute; width: 10rpx; height: 10rpx; left: 20rpx; top: 39rpx; border: 4rpx solid $color-compat263129; border-top: 0; border-right: 0; transform: rotate(-20deg); }
+.status-panel { min-height: 180rpx; margin-top: 28rpx; padding: 34rpx; display: flex; align-items: center; gap: 24rpx; border-radius: $radius-v34rpx; color: $color-white; background: $color-primary; }
+.status-panel__icon { width: 72rpx; height: 72rpx; display: grid; place-items: center; border-radius: $radius-v24rpx; background: $color-compatOverlay8; }
+.status-panel__icon view { width: 38rpx; height: 38rpx; display: grid; place-items: center; border: 4rpx solid $color-white; border-radius: $radius-v50percent; font-size: $font-size-v22rpx; }
 .status-panel > view:last-child { display: flex; flex-direction: column; }
-.status-panel__title { font-size: 34rpx; font-weight: 800; }
-.status-panel__copy { margin-top: 12rpx; color: rgba(255,255,255,.7); font-size: 22rpx; }
-.progress-card { position: relative; margin-top: 22rpx; padding: 28rpx 16rpx; display: grid; grid-template-columns: repeat(4, 1fr); border-radius: 28rpx; background: #fff; }
-.progress-step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 12rpx; color: #9aa29c; font-size: 20rpx; }
-.progress-step__dot { width: 44rpx; height: 44rpx; display: grid; place-items: center; border: 4rpx solid #d7ddd7; border-radius: 50%; background: #fff; }
-.progress-step.done { color: #173f34; font-weight: 700; }
-.progress-step.done .progress-step__dot { border-color: #173f34; color: #fff; background: #173f34; }
-.progress-line { position: absolute; top: 49rpx; width: 17%; height: 4rpx; background: #dfe4de; }
-.progress-line--1 { left: 17%; background: #173f34; }.progress-line--2 { left: 42%; }.progress-line--3 { left: 67%; }
-.order-card { margin-top: 22rpx; border-radius: 28rpx; background: #fff; }
+.status-panel__title { font-size: $font-size-v34rpx; font-weight: $font-weight-v800; }
+.status-panel__copy { margin-top: 12rpx; color: $color-compatOverlay9; font-size: $font-size-v22rpx; }
+.progress-card { position: relative; margin-top: 22rpx; padding: 28rpx 16rpx; display: grid; grid-template-columns: repeat(4, 1fr); border-radius: $radius-v28rpx; background: $color-card; }
+.progress-step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 12rpx; color: $color-compat9AA29C; font-size: $font-size-v20rpx; }
+.progress-step__dot { width: 44rpx; height: 44rpx; display: grid; place-items: center; border: 4rpx solid $color-compatD7DDD7; border-radius: $radius-v50percent; background: $color-white; }
+.progress-step.done { color: $color-primary; font-weight: $font-weight-v700; }
+.progress-step.done .progress-step__dot { border-color: $color-primary; color: $color-white; background: $color-primary; }
+.progress-line { position: absolute; top: 49rpx; width: 17%; height: 4rpx; background: $color-compatDFE4DE; }
+.progress-line--1 { left: 17%; background: $color-primary; }.progress-line--2 { left: 42%; }.progress-line--3 { left: 67%; }
+.order-card { margin-top: 22rpx; border-radius: $radius-v28rpx; background: $color-card; }
 .provider-row { padding: 28rpx; display: flex; align-items: center; }
-.avatar { width: 76rpx; height: 76rpx; flex: 0 0 auto; overflow: hidden; border-radius: 50%; background: #d6aa86; }
-.avatar view { width: 55rpx; height: 67rpx; margin: 17rpx auto 0; border-radius: 50% 50% 20% 20%; background: #2d312c; }
+.avatar { width: 76rpx; height: 76rpx; flex: 0 0 auto; overflow: hidden; border-radius: $radius-v50percent; background: $color-compatD6AA86; }
+.avatar view { width: 55rpx; height: 67rpx; margin: 17rpx auto 0; border-radius: $radius-v50percent_50percent_20percent_20percent; background: $color-compat2D312C; }
 .provider-copy { min-width: 0; margin-left: 20rpx; display: flex; flex: 1; flex-direction: column; gap: 9rpx; }
-.provider-copy text:first-child { font-size: 27rpx; font-weight: 700; }.provider-copy text:last-child { color: #87918a; font-size: 20rpx; }
-.provider-row button { width: auto; height: 60rpx; margin: 0; padding: 0 21rpx; border-radius: 20rpx; color: #173f34; background: #e8f0eb; font-size: 22rpx; }
+.provider-copy text:first-child { font-size: $font-size-v27rpx; font-weight: $font-weight-v700; }.provider-copy text:last-child { color: $color-compat87918A; font-size: $font-size-v20rpx; }
+.provider-row button { width: auto; height: 60rpx; margin: 0; padding: 0 21rpx; border-radius: $radius-v20rpx; color: $color-primary; background: $color-compatE8F0EB; font-size: $font-size-v22rpx; }
 .detail-card { padding: 30rpx; }
-.card-title { display: block; padding-bottom: 25rpx; border-bottom: 1rpx solid #e4e8e2; font-size: 29rpx; font-weight: 800; }
-.detail-row { min-height: 68rpx; display: flex; align-items: center; justify-content: space-between; color: #78837b; font-size: 23rpx; }
-.detail-row text:last-child { max-width: 66%; color: #2c3730; text-align: right; }
-.detail-row.total { margin-top: 10rpx; padding-top: 20rpx; border-top: 1rpx solid #e4e8e2; }
-.detail-row.total text:last-child { color: #e75a40; font-size: 30rpx; font-weight: 800; }
-.safety-note { margin-top: 22rpx; padding: 24rpx 28rpx; display: flex; gap: 18rpx; border-radius: 26rpx; color: #805a31; background: #fff0d8; }
-.safety-note__icon { width: 42rpx; height: 42rpx; flex: 0 0 auto; display: grid; place-items: center; border: 3rpx solid currentColor; border-radius: 50%; font-weight: 800; }
-.safety-note > view:last-child { display: flex; flex-direction: column; gap: 8rpx; }.safety-note text:first-child { font-size: 24rpx; font-weight: 700; }.safety-note text:last-child { color: #98744e; font-size: 20rpx; }
+.card-title { display: block; padding-bottom: 25rpx; border-bottom: 1rpx solid $color-compatE4E8E2; font-size: $font-size-v29rpx; font-weight: $font-weight-v800; }
+.detail-row { min-height: 68rpx; display: flex; align-items: center; justify-content: space-between; color: $color-compat78837B; font-size: $font-size-v23rpx; }
+.detail-row text:last-child { max-width: 66%; color: $color-compat2C3730; text-align: right; }
+.detail-row.total { margin-top: 10rpx; padding-top: 20rpx; border-top: 1rpx solid $color-compatE4E8E2; }
+.detail-row.total text:last-child { color: $color-accent; font-size: $font-size-v30rpx; font-weight: $font-weight-v800; }
+.safety-note { margin-top: 22rpx; padding: 24rpx 28rpx; display: flex; gap: 18rpx; border-radius: $radius-v26rpx; color: $color-compat805A31; background: $color-compatFFF0D8; }
+.safety-note__icon { width: 42rpx; height: 42rpx; flex: 0 0 auto; display: grid; place-items: center; border: 3rpx solid currentColor; border-radius: $radius-v50percent; font-weight: $font-weight-v800; }
+.safety-note > view:last-child { display: flex; flex-direction: column; gap: 8rpx; }.safety-note text:first-child { font-size: $font-size-v24rpx; font-weight: $font-weight-v700; }.safety-note text:last-child { color: $color-compat98744E; font-size: $font-size-v20rpx; }
 .menu-card { overflow: hidden; }
-.menu-card > view { height: 84rpx; margin: 0 28rpx; display: flex; align-items: center; justify-content: space-between; border-bottom: 1rpx solid #e5e9e4; font-size: 25rpx; }
-.menu-card > view:last-child { border-bottom: 0; }.menu-card > view text:last-child { color: #a5ada7; font-size: 36rpx; }
-.avatar { display: grid; place-items: center; color: #fffdf6; background: #153f35; }.avatar text { font-size: 28rpx; font-weight: 900; transform: rotate(-5deg); }.avatar view { display: none; }
-.order-page { color: #153f35; background: #f3f5f0; }.top-nav button { border-radius: 14rpx; }
-.status-panel { position: relative; overflow: hidden; border-radius: 12rpx; background: #0f4838; }.status-panel::after { content: "QD / ACCEPTED"; position: absolute; right: 22rpx; bottom: 15rpx; color: rgba(255,253,246,.16); font-size: 18rpx; letter-spacing: 3rpx; }
-.progress-card, .order-card { border-radius: 12rpx; background: #fffdf6; box-shadow: 0 8rpx 22rpx rgba(21,63,53,.07); }.progress-card { border-top: 3rpx solid #ef644a; }
-.progress-step__dot { border-radius: 8rpx; }.progress-step.done .progress-step__dot { background: #153f35; }
-.provider-row button { border-radius: 999rpx; background: #b8cfbf; }.card-title, .menu-card > view { border-bottom-style: dashed; }
-.safety-note { border: 2rpx dashed #d5aa74; border-radius: 8rpx; }
+.menu-card > view { height: 84rpx; margin: 0 28rpx; display: flex; align-items: center; justify-content: space-between; border-bottom: 1rpx solid $color-compatE5E9E4; font-size: $font-size-v25rpx; }
+.menu-card > view:last-child { border-bottom: 0; }.menu-card > view text:last-child { color: $color-compatA5ADA7; font-size: $font-size-v36rpx; }
+.avatar { display: grid; place-items: center; color: $color-inverseWarm; background: $color-primary; }.avatar text { font-size: $font-size-v28rpx; font-weight: $font-weight-v900; transform: rotate(-5deg); }.avatar view { display: none; }
+.order-page { color: $color-text; background: $color-compatF3F5F0; }.top-nav button { border-radius: $radius-v14rpx; }
+.status-panel { position: relative; overflow: hidden; border-radius: $radius-v12rpx; background: $color-primary; }.status-panel::after { content: "QD / ACCEPTED"; position: absolute; right: 22rpx; bottom: 15rpx; color: $color-compatOverlay10; font-size: $font-size-v18rpx; letter-spacing: 3rpx; }
+.progress-card, .order-card { border-radius: $radius-v12rpx; background: $color-card; box-shadow: 0 8rpx 22rpx $color-compatOverlay11; }.progress-card { border-top: 3rpx solid $color-accent; }
+.progress-step__dot { border-radius: $radius-v8rpx; }.progress-step.done .progress-step__dot { background: $color-primary; }
+.provider-row button { border-radius: $radius-v999rpx; background: $color-compatB8CFBF; }.card-title, .menu-card > view { border-bottom-style: dashed; }
+.safety-note { border: 2rpx dashed $color-compatD5AA74; border-radius: $radius-v8rpx; }
 </style>

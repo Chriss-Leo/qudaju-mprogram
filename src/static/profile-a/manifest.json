@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "designReference": ".impeccable/mocks/A-profile-detail.png",
+  "generationMode": "native image_gen",
+  "illustrativeOnly": true,
+  "notes": "Independent generated production assets, not cropped from a UI composition. People are fictional; imagery does not establish real activity participation or earned status. Tickets are decorative and have no stars/badges.",
+  "assets": [
+    {
+      "id": "tickets",
+      "path": "src/static/profile-a/decorative-tickets.png",
+      "prompt": "Use case: stylized-concept. Asset type: independent decorative transparent PNG asset for a Chinese social activity app profile header. Primary request: two overlapping chunky sculpted admission tickets, a rich blue ticket behind tilted 15 degrees counterclockwise and a warm orange ticket in front tilted 22 degrees clockwise, floating as a friendly premium 3D clay-acrylic illustration. Rounded ticket corners and semicircular side notches, thick beveled rims, soft inset border lines, subtle translucent blue face and matte orange face. Color palette: blue #1C4A9C and orange #FA704B with softer highlights. Composition: isolated centered paired tickets occupying most of a square canvas, generous padding so no edges are cut. Soft upper-left studio light and restrained dimensional shadows only on the tickets. Constraints: genuinely transparent background and preserved alpha; NO backdrop, no checkerboard rendered into pixels, NO text, NO letters, NO numbers, NO stars, NO badges, NO checkmarks, NO earned-status symbols, no watermark. Only the decorative paired tickets.",
+      "width": 512,
+      "height": 512,
+      "format": "png",
+      "transparent": true,
+      "promptMetadata": "PNG tEXt impeccable:prompt",
+      "sourcePath": "/Users/chris/.codex/generated_images/01a132c9-d2e5-7bb1-b66b-fb2dad37172d/exec-aae2bda8-85fb-4f2f-983f-8ca0d7f2b09f.png"
+    },
+    {
+      "id": "hero",
+      "path": "src/static/profile-a/boardgame-hero.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: independent landscape hero photograph for an illustrative Chinese social boardgame activity detail page. Primary request: four fictional Chinese young adult friends in their twenties, two women in center, a man with glasses in dark sweater at left and a man in cream sweatshirt at right, laughing naturally while playing a colorful light-strategy boardgame together at a wooden cafe table. Warm inviting modern Shanghai cafe with green plants and softly blurred timber and glass shelving behind them. Composition: landscape 3:2 image, medium-wide eye-level candid view, all four faces visible, table and game pieces/cards filling the lower third. Lighting: soft warm cafe light with natural window fill, real skin and hair texture. Friendly relaxed approachable mood, not an advertising pose. Constraints: adults only, fictional people; no logos, no readable text, no watermark, anatomically natural hands. This is illustrative demo imagery, not evidence of a real event.",
+      "width": 1280,
+      "height": 853,
+      "format": "jpeg",
+      "transparent": false,
+      "promptMetadata": "JPEG COM impeccable:prompt",
+      "sourcePath": "/Users/chris/.codex/generated_images/01a132c9-d2e5-7bb1-b66b-fb2dad37172d/exec-0f95e0c0-cc4f-475b-a6be-297287e15924.png"
+    },
+    {
+      "id": "avatar",
+      "path": "src/static/profile-a/profile-avatar.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: independent square portrait avatar for illustrative Chinese young woman profile in a social activity app. Primary request: fictional Chinese young adult woman in her twenties with shoulder-length dark brown hair and soft fringe, warm brown eyes, a gentle natural smile, cream knit top, subtle natural makeup. Composition: head-and-shoulders centered square portrait, full hair comfortably inside frame, warm ivory softly blurred background. Style: natural editorial portrait, detailed realistic skin, friendly approachable mood, soft daylight. Constraints: adult fictional person only, no text, no logos, no watermark. This is illustrative profile imagery.",
+      "width": 512,
+      "height": 512,
+      "format": "jpeg",
+      "transparent": false,
+      "promptMetadata": "JPEG COM impeccable:prompt",
+      "sourcePath": "/Users/chris/.codex/generated_images/01a132c9-d2e5-7bb1-b66b-fb2dad37172d/exec-7e9bc2d8-6e62-4872-b0f8-5caf1f517054.png"
+    },
+    {
+      "id": "host",
+      "path": "src/static/profile-a/host-avatar.jpg",
+      "prompt": "Use case: illustration-story. Asset type: independent square host avatar for a fictional Chinese social activity organizer named 阿橙. Primary request: appealing hand-painted semi-realistic animation portrait of a fictional Chinese young adult man in his twenties with tousled dark hair, warm smile, orange hoodie layered under a light jacket. Composition: centered head and shoulders, comfortably inside square frame, warm softly blurred outdoors with autumn trees and a blue sky. Style: sophisticated soft animated-film portrait, warm color and delicate painterly detail, friendly approachable expression. Constraints: adult fictional person only, no text, no logos, no watermark.",
+      "width": 512,
+      "height": 512,
+      "format": "jpeg",
+      "transparent": false,
+      "promptMetadata": "JPEG COM impeccable:prompt",
+      "sourcePath": "/Users/chris/.codex/generated_images/01a132c9-d2e5-7bb1-b66b-fb2dad37172d/exec-02beade6-8ce0-4dfa-bf8e-2e6960e7281b.png"
+    }
+  ]
+}

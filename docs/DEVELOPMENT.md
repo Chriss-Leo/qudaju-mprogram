@@ -19,6 +19,7 @@ npm run build:h5
 - `src/pages/index`：固定首页。
 - `src/pages/groups`：组局列表、地址、统一搜索筛选。
 - `src/components`：导航、卡片、抽屉和兼容旧页的组件。
+- `src/theme`：统一主题配置及生成产物，详见THEME.md；不得在组件重复定义。
 - `src/mocks`：示例数据。groups仍借用services的id/距离/可用时间；待独立活动模型接入。
 - `src/platforms`：微信、支付宝、小红书能力适配，目前为演示接口。
 - `src/static`：运行时素材；不得混入候选稿或大原图。

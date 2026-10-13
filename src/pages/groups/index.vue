@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { theme } from "../../theme";
 import { computed, onUnmounted, ref, watch } from "vue";
 import { onResize, onShow } from "@dcloudio/uni-app";
 import AppTabBar from "../../components/AppTabBar.vue";
@@ -37,7 +38,7 @@ const windowInfo = uni.getWindowInfo();
 const pageHeight = ref(windowInfo.windowHeight);
 onResize(({ size }) => { if (size) pageHeight.value = size.windowHeight; });
 onShow(() => {
-  uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: "#fbfcf8" });
+  uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: theme.colors.white });
 });
 
 function explore() {
@@ -126,16 +127,16 @@ function demo(message: string) { uni.showToast({ title: message, icon: "none" })
     <view class="discovery-location" :style="brandBarStyle">
       <!-- #ifdef MP-WEIXIN -->
       <picker mode="region" :value="selectedRegion" @change="changeRegion">
-        <view class="region-trigger" role="button" aria-label="选择省市区"><uni-icons type="location" size="25" color="#153f35" /><text>{{ currentCity }}<text class="location-separator"> · </text>{{ currentArea === '上海' ? '全城' : currentArea }}</text></view>
+        <view class="region-trigger" role="button" aria-label="选择省市区"><uni-icons type="location" size="25" :color="theme.colors.text" /><text>{{ currentCity }}<text class="location-separator"> · </text>{{ currentArea === '上海' ? '全城' : currentArea }}</text></view>
       </picker>
       <!-- #endif -->
       <!-- #ifndef MP-WEIXIN -->
-      <button aria-label="切换所在区域" @tap="locationVisible = true"><uni-icons type="location" size="25" color="#153f35" /><text>{{ currentCity }}<text class="location-separator"> · </text>{{ currentArea === '上海' ? '全城' : currentArea }}</text></button>
+      <button aria-label="切换所在区域" @tap="locationVisible = true"><uni-icons type="location" size="25" :color="theme.colors.text" /><text>{{ currentCity }}<text class="location-separator"> · </text>{{ currentArea === '上海' ? '全城' : currentArea }}</text></button>
       <!-- #endif -->
     </view>
     <view class="filter-rail">
       <button v-for="item in ['全部', '推荐', '距离', '本周']" :key="item" :class="{ active: quickFilter === item }" @tap="selectQuick(item)">{{ item }}</button>
-      <button class="rail-search" :class="{ 'rail-search--filtered': hasSearchFilters }" aria-label="搜索与筛选" @tap="openSearch"><uni-icons type="search" size="25" color="#153f35" /></button>
+      <button class="rail-search" :class="{ 'rail-search--filtered': hasSearchFilters }" aria-label="搜索与筛选" @tap="openSearch"><uni-icons type="search" size="25" :color="theme.colors.text" /></button>
     </view>
     </view>
     <scroll-view scroll-y class="groups-scroll">
@@ -155,7 +156,7 @@ function demo(message: string) { uni.showToast({ title: message, icon: "none" })
     </scroll-view>
     </view>
 
-    <AppTabBar active="discover" @discover="explore" />
+    <AppTabBar active="discover" owner-route="pages/groups/index" @discover="explore" />
 
     <!-- #ifdef H5 -->
     <Teleport to="body">
@@ -173,8 +174,8 @@ function demo(message: string) { uni.showToast({ title: message, icon: "none" })
     <view v-if="filterVisible" class="search-overlay" @keydown.esc="filterVisible = false">
       <view class="search-overlay__mask" @tap="filterVisible = false" @touchmove.stop.prevent />
       <view class="search-dialog" role="dialog" aria-modal="true" aria-label="找到想去的局">
-        <view class="search-dialog__header"><text>找到想去的局</text><button aria-label="关闭搜索" @tap="filterVisible = false"><uni-icons type="closeempty" size="25" color="#153f35" /></button></view>
-        <view class="search-dialog__input"><uni-icons type="search" size="22" color="#153f35" /><input v-model="draftFilters.keyword" placeholder="搜索标题、玩法或标签" confirm-type="search" @confirm="applyFilters" /></view>
+        <view class="search-dialog__header"><text>找到想去的局</text><button aria-label="关闭搜索" @tap="filterVisible = false"><uni-icons type="closeempty" size="25" :color="theme.colors.text" /></button></view>
+        <view class="search-dialog__input"><uni-icons type="search" size="22" :color="theme.colors.text" /><input v-model="draftFilters.keyword" placeholder="搜索标题、玩法或标签" confirm-type="search" @confirm="applyFilters" /></view>
         <scroll-view scroll-y class="search-dialog__filters">
           <view v-for="group in filterGroups" :key="group.key" class="search-choice">
             <text>{{ group.label }}</text>
@@ -191,37 +192,38 @@ function demo(message: string) { uni.showToast({ title: message, icon: "none" })
 </template>
 
 <style scoped lang="scss">
-.home-page { height: var(--groups-page-height, 100vh); overflow: hidden; color: #103f33; background: #fbfcf8; }
+.home-page { height: var(--groups-page-height, 100vh); overflow: hidden; color: $color-text; background: $color-white; }
 .activity-discovery { height: 100%; display: flex; flex-direction: column; }
-.groups-header { flex: 0 0 auto; background: #fbfcf8; }
+.groups-header { flex: 0 0 auto; background: $color-white; }
 .groups-scroll { flex: 1; height: 0; min-height: 0; }
 .discovery-location button::after, .search-dialog button::after, .filter-rail button::after { border: 0; }
 .discovery-location { padding: calc(var(--menu-button-top, 0px) + 12rpx) var(--menu-right-reserve, 17px) 8rpx 30rpx; }
-.discovery-location button, .region-trigger { display: flex; align-items: center; gap: 10rpx; width: max-content; min-height: 80rpx; margin: 0; padding: 0; color: #153f35; background: transparent; font-size: 28rpx; line-height: 1.5; font-weight: 500; }
-.location-separator { color: #8a988f; }
+.discovery-location button, .region-trigger { display: flex; align-items: center; gap: 10rpx; width: max-content; min-height: 80rpx; margin: 0; padding: 0; color: $color-text; background: transparent; font-size: $font-size-v28rpx; line-height: $line-height-v1p5; font-weight: $font-weight-v500; }
+.location-separator { color: $color-textPlaceholder; }
 .filter-rail .rail-search { display: flex; align-items: center; justify-content: center; min-width: 60rpx; }
-.rail-search--filtered::before { content: ""; position: absolute; top: 10rpx; right: 4rpx; width: 10rpx; height: 10rpx; border-radius: 50%; background: #fa704b; }
+.rail-search--filtered::before { content: ""; position: absolute; top: 10rpx; right: 4rpx; width: 10rpx; height: 10rpx; border-radius: $radius-v50percent; background: $color-accent; }
 .search-overlay { position: fixed; inset: 0; z-index: 100; }
-.search-overlay__mask { position: absolute; inset: 0; background: rgba(10,23,18,.5); }
-.search-dialog { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 92%; max-height: 86vh; padding: 30rpx; border-radius: 32rpx; background: #fffdf6; color: #153f35; display: flex; flex-direction: column; }
-.search-dialog__header { display: flex; align-items: center; justify-content: space-between; gap: 20rpx; margin-bottom: 24rpx; font-size: 35rpx; font-weight: 700; }
+.search-overlay__mask { position: absolute; inset: 0; background: $color-compatOverlay28; }
+.search-dialog { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 92%; max-height: 86vh; padding: 30rpx; border-radius: $radius-v32rpx; background: $color-inverseWarm; color: $color-text; display: flex; flex-direction: column; }
+.search-dialog__header { display: flex; align-items: center; justify-content: space-between; gap: 20rpx; margin-bottom: 24rpx; font-size: $font-size-v35rpx; font-weight: $font-weight-v700; }
 .search-dialog__header button { display: flex; align-items: center; justify-content: center; width: 60rpx; height: 60rpx; margin: 0; padding: 0; background: transparent; }
-.search-dialog__input { display: flex; align-items: center; gap: 14rpx; min-height: 82rpx; padding: 0 22rpx; border-radius: 22rpx; background: #edf3ec; }
-.search-dialog__input input { flex: 1; min-width: 0; font-size: 27rpx; color: #153f35; }
+.search-dialog__input { display: flex; align-items: center; gap: 14rpx; min-height: 82rpx; padding: 0 22rpx; border-radius: $radius-v22rpx; background: $color-input; }
+.search-dialog__input input { flex: 1; min-width: 0; font-size: $font-size-v27rpx; color: $color-text; }
 .search-dialog__filters { min-height: 0; height: 560rpx; margin: 22rpx 0; }
 .search-choice { display: flex; align-items: flex-start; gap: 18rpx; padding: 12rpx 0; }
-.search-choice > text { width: 116rpx; flex-shrink: 0; padding-top: 17rpx; font-size: 25rpx; line-height: 1.35; font-weight: 600; }
+.search-choice > text { width: 116rpx; flex-shrink: 0; padding-top: 17rpx; font-size: $font-size-v25rpx; line-height: $line-height-v1p35; font-weight: $font-weight-v600; }
 .search-choice > view { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 12rpx; }
-.search-choice button { min-width: 112rpx; height: 66rpx; padding: 0 18rpx; margin: 0; border: 1rpx solid #d4ddd6; border-radius: 14rpx; background: #fff; color: #52685b; font-size: 24rpx; line-height: 64rpx; }
-.search-choice button.selected { border-color: #153f35; color: #fff; background: #153f35; }
+.search-choice button { min-width: 112rpx; height: 66rpx; padding: 0 18rpx; margin: 0; border: 1rpx solid $color-border; border-radius: $radius-v14rpx; background: $color-white; color: $color-textSecondary; font-size: $font-size-v24rpx; line-height: $line-height-v64rpx; }
+.search-choice button.selected { border-color: $color-primary; color: $color-white; background: $color-primary; }
 .search-dialog__actions { display: flex; gap: 18rpx; }
-.search-dialog__actions button { flex: 1; height: 80rpx; margin: 0; padding: 0; border: 1rpx solid #153f35; border-radius: 20rpx; background: transparent; color: #153f35; font-size: 28rpx; line-height: 78rpx; }
-.search-dialog__actions button:last-child { flex: 1.5; border-color: #fa704b; background: #fa704b; color: #fff; font-weight: 600; }
+.search-dialog__actions button { flex: 1; height: 80rpx; margin: 0; padding: 0; border: 1rpx solid $color-primary; border-radius: $radius-v20rpx; background: $color-primary; color: $color-white; font-size: $font-size-v28rpx; line-height: $line-height-v78rpx; }
+.search-dialog__actions button:first-child { border-color: $color-primary; color: $color-primary; background: $color-white; }
+.search-dialog__actions button:last-child { flex: 1.5; border-color: $color-primary; background: $color-primary; color: $color-white; font-weight: $font-weight-v600; }
 /* #ifdef H5 */
 @media (min-width: 600px) { .home-page { height: var(--qudaju-preview-layout-height, 100vh); } .search-dialog { width: 880px; max-height: calc(86vh / var(--qudaju-preview-scale, 1)); transform: translate(-50%, -50%) scale(var(--qudaju-preview-scale, 1)); } }
 /* #endif */
 @media (max-height: 700px) { .search-dialog__filters { height: 380rpx; } }
-.activity-discovery { position: relative; background: #fbfcf8; }
+.activity-discovery { position: relative; background: $color-white; }
 .group-feed { display: flex; flex-direction: column; gap: 24rpx; padding: 24rpx 24rpx calc(184rpx + env(safe-area-inset-bottom)); }
 /* #ifdef H5 */
 /* #endif */
@@ -231,13 +233,13 @@ button:active { transform: scale(.98); opacity: .86; }
 
 
 
-.filter-rail { height: 76rpx; padding: 0 30rpx; display: flex; align-items: stretch; justify-content: space-between; border-bottom: 1rpx solid #d7ded8; background: #fbfcf8; }
-.filter-rail button { position: relative; width: auto; height: 100%; flex: 0 0 auto; margin: 0; padding: 0; color: #70756f; background: transparent; font-size: 27rpx; line-height: 76rpx; font-weight: 800; }.filter-rail button.active { color: #0f4838; font-weight: 900; }.filter-rail button.active::after { content: ""; position: absolute; top: auto; right: auto; left: 50%; bottom: 2rpx; width: 40rpx; height: 3rpx; margin: 0; border: 0; border-radius: 0; background: #0f4838; transform: translateX(-50%); }
+.filter-rail { height: 76rpx; padding: 0 30rpx; display: flex; align-items: stretch; justify-content: space-between; border-bottom: 1rpx solid $color-border; background: $color-white; }
+.filter-rail button { position: relative; width: auto; height: 100%; flex: 0 0 auto; margin: 0; padding: 0; color: $color-textMuted; background: transparent; font-size: $font-size-v27rpx; line-height: $line-height-v76rpx; font-weight: $font-weight-v800; }.filter-rail button.active { color: $color-text; font-weight: $font-weight-v900; }.filter-rail button.active::after { content: ""; position: absolute; top: auto; right: auto; left: 50%; bottom: 2rpx; width: 40rpx; height: 3rpx; margin: 0; border: 0; border-radius: $radius-v0; background: $color-primary; transform: translateX(-50%); }
 
-.empty-poster { margin: 28rpx 20rpx; padding: 56rpx 28rpx; display: flex; flex-direction: column; align-items: center; border: 2rpx dashed #aab8ad; background: #fffdf6; }.empty-poster text { font-size: 26rpx; font-weight: 800; }.empty-poster button { margin-top: 24rpx; padding: 0 28rpx; color: #fff; background: #0f4838; }
+.empty-poster { margin: 28rpx 20rpx; padding: 56rpx 28rpx; display: flex; flex-direction: column; align-items: center; border: 2rpx dashed $color-compatBDADB4; background: $color-inverseWarm; }.empty-poster text { font-size: $font-size-v26rpx; font-weight: $font-weight-v800; }.empty-poster button { margin-top: 24rpx; padding: 0 28rpx; color: $color-white; background: $color-primary; }
 
-.city-row { padding: 20rpx 0 28rpx; display: flex; align-items: center; justify-content: space-between; }.city-row > view { display: flex; flex-direction: column; gap: 8rpx; }.city-label { color: #728078; font-size: 20rpx; }.city-name { font-size: 39rpx; font-weight: 900; }.city-switch { width: auto; margin: 0; padding: 0 23rpx; border: 2rpx solid #b7c2b9; color: #153f35; background: #fffdf6; }
-.area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13rpx; }.area-grid button { height: 68rpx; margin: 0; padding: 0; border: 2rpx solid #d5ddd6; border-radius: 8rpx; color: #49554e; background: #f2f4ef; font-size: 21rpx; }.area-grid button.selected { border-color: #ef644a; color: #fff; background: #ef644a; }
+.city-row { padding: 20rpx 0 28rpx; display: flex; align-items: center; justify-content: space-between; }.city-row > view { display: flex; flex-direction: column; gap: 8rpx; }.city-label { color: $color-textMuted; font-size: $font-size-v20rpx; }.city-name { font-size: $font-size-v39rpx; font-weight: $font-weight-v900; }.city-switch { width: auto; margin: 0; padding: 0 23rpx; border: 2rpx solid $color-compatCEC0C6; color: $color-text; background: $color-inverseWarm; }
+.area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13rpx; }.area-grid button { height: 68rpx; margin: 0; padding: 0; border: 2rpx solid $color-border; border-radius: $radius-v8rpx; color: $color-textSecondary; background: $color-white; font-size: $font-size-v21rpx; }.area-grid button.selected { border-color: $color-primary; color: $color-white; background: $color-primary; }
 
 @media (prefers-reduced-motion: reduce) { button { transition: none; } }
 
