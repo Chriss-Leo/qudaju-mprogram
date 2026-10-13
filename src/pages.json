@@ -20,7 +20,7 @@
     },
     {
       "path": "pages/service-detail/index",
-      "style": { "navigationStyle": "custom", "navigationBarTitleText": "服务详情" }
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "组局详情", "disableScroll": true }
     },
     {
       "path": "pages/order-submit/index",

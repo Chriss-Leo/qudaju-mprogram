@@ -8,7 +8,7 @@ const targets = {
   "home-muted": ["house-fill", colors.iconMuted],
   profile: ["user", colors.primary],
   "profile-muted": ["user", colors.iconMuted],
-  plus: ["plus", colors.inverseWarm],
+  plus: ["plus", colors.accentForeground],
 };
 for (const [file, [name, color]] of Object.entries(targets)) {
   const icon = icons[name];

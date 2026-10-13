@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from "vue";
-import { onLoad, onShow, onHide } from "@dcloudio/uni-app";
+import { onLoad, onShow, onResize } from "@dcloudio/uni-app";
 import { theme } from "../../theme";
 import { groupCards } from "../../mocks/group-cards";
 import SurfaceHeader from "../../components/SurfaceHeader.vue";
 import UiIcon from "../../components/UiIcon.vue";
 
 const groupId = ref("game-01");
-const active = ref(true);
+const viewportHeight = ref(uni.getWindowInfo().windowHeight);
+onResize(({ size }) => { if (size) viewportHeight.value = size.windowHeight; });
 const imageFailed = ref(false);
 const group = computed(() => Object.prototype.hasOwnProperty.call(groupCards, groupId.value) ? groupCards[groupId.value] : undefined);
 const photos: Record<string, string> = {
@@ -44,8 +45,7 @@ function syncQuery() {
 onMounted(() => { syncQuery(); window.addEventListener("hashchange", syncQuery); });
 onUnmounted(() => window.removeEventListener("hashchange", syncQuery));
 // #endif
-onShow(() => { active.value = true; uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: theme.colors.white }); });
-onHide(() => { active.value = false; });
+onShow(() => { uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: theme.colors.white }); });
 function back() { uni.navigateBack({ fail: () => uni.redirectTo({ url: "/pages/groups/index" }) }); }
 function preview() { const url = photos[groupId.value]; if (url) uni.previewImage({ urls: [url], current: url }); }
 function apply() {
@@ -55,12 +55,13 @@ function hostInfo() { uni.showToast({ title: "局主信息卡片尚未接入", i
 </script>
 
 <template>
-  <view class="meetup-detail" data-design-contract="THESIS: photograph-led meetup, no service booking cards. OWN-WORLD: white, blue utilities, orange application. STORY: activity then facts and rules. FIRST VIEWPORT: photo, title, four facts, host. FORM: user-approved A 2026-10-13. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md">
+  <view class="meetup-detail" :style="{ height: viewportHeight + 'px' }" data-design-contract="THESIS: photograph-led meetup, no service booking cards. OWN-WORLD: white, blue utilities, orange application. STORY: activity then facts and rules. FIRST VIEWPORT: photo, title, four facts, host. FORM: user-approved A 2026-10-13. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md">
     <!-- THESIS: The approved A meetup photograph and open reading hierarchy, not service booking cards.
          OWN-WORLD: white, blue utility icons, orange application; independent photo and semantic controls.
          STORY: activity, facts, host, review rules, application. FIRST VIEWPORT: photo, title, tags, four facts, host.
          FORM: User-approved A, 2026-10-13. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
     <SurfaceHeader title="组局详情" back @back="back" />
+    <scroll-view class="detail-scroll" scroll-y :show-scrollbar="false">
     <view v-if="group" class="detail-content">
       <button class="hero-button" aria-label="查看活动示例大图" @tap="preview">
         <image v-if="!imageFailed" class="detail-photo" :src="photos[groupId]" mode="aspectFill" @error="imageFailed = true" />
@@ -82,22 +83,22 @@ function hostInfo() { uni.showToast({ title: "局主信息卡片尚未接入", i
       <text class="detail-demo">活动、人物及图片均为示例，暂不开放真实报名。</text>
     </view>
     <view v-else class="detail-empty"><text class="detail-heading">暂未找到这个局</text><text>返回列表，看看其他同城活动。</text><button @tap="back">返回列表</button></view>
-    <!-- #ifdef H5 -->
-    <Teleport to="body">
-    <!-- #endif -->
-    <view v-if="active && group" class="detail-actions">
-      <view class="detail-price"><text>{{ group.fund ? "¥" + group.fund : "免费" }}</text><text v-if="group.fund">活动基金 / 人</text></view>
-      <button @tap="apply">{{ group.admission === '局主审核' ? '申请加入' : '报名加入' }}</button>
+    </scroll-view>
+    <view v-if="group" class="detail-actions">
+      <view class="detail-price">
+        <text class="detail-price__label">{{ group.fund ? '活动基金' : '活动费用' }}</text>
+        <view class="detail-price__amount"><text v-if="group.fund" class="detail-price__unit">¥</text><text class="detail-price__value">{{ group.fund || '免费' }}</text><text v-if="group.fund" class="detail-price__unit">/ 人</text></view>
+      </view>
+      <button class="detail-apply action-accent" @tap="apply"><text>{{ group.admission === '局主审核' ? '申请加入' : '报名加入' }}</text></button>
     </view>
-    <!-- #ifdef H5 -->
-    </Teleport>
-    <!-- #endif -->
   </view>
 </template>
 
 <style scoped lang="scss">
-.meetup-detail { min-height: 100vh; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); background: $color-white; color: $color-text; }
-.detail-content { padding: 0 28rpx 20rpx; }
+.meetup-detail { display: flex; flex-direction: column; overflow: hidden; background: $color-white; color: $color-text; }
+.meetup-detail :deep(.surface-header) { flex-shrink: 0; padding-bottom: 14rpx; }
+.detail-scroll { flex: 1; height: 0; min-height: 0; }
+.detail-content { padding: 20rpx 28rpx 40rpx; }
 .hero-button { display: block; margin: 0; padding: 0; width: 100%; height: 452rpx; overflow: hidden; border-radius: $radius-v24rpx; background: $color-card; }
 .detail-photo { display: block; width: 100%; height: 100%; }
 .photo-error { height: 100%; display: flex; align-items: center; justify-content: center; color: $color-textMuted; font-size: $font-size-v26rpx; }
@@ -124,11 +125,13 @@ function hostInfo() { uni.showToast({ title: "局主信息卡片尚未接入", i
 .detail-rule text:first-child { display: block; color: $color-primary; font-size: $font-size-v28rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p4; }
 .detail-rule text:last-child { display: block; margin-top: 10rpx; color: $color-textSecondary; font-size: $font-size-v24rpx; line-height: $line-height-v1p6; }
 .detail-demo { display: block; margin-top: 24rpx; color: $color-textMuted; font-size: $font-size-v21rpx; line-height: $line-height-v1p5; }
-.detail-actions { position: fixed; z-index: 25; bottom: 0; left: 0; right: 0; padding: 20rpx 28rpx calc(20rpx + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 28rpx; border-top: 1rpx solid $color-border; background: $color-white; font-family: $font-body; }
-.detail-price { min-width: 140rpx; display: flex; flex-direction: column; gap: 6rpx; }
-.detail-price text:first-child { color: $color-text; font-size: $font-size-v34rpx; font-weight: $font-weight-v700; line-height: $line-height-v1p3; }
-.detail-price text:last-child:not(:first-child) { color: $color-textMuted; font-size: $font-size-v20rpx; line-height: $line-height-v1p4; }
-.detail-actions button { flex: 1; height: 88rpx; margin: 0; padding: 0 24rpx; display: flex; justify-content: center; align-items: center; border-radius: $radius-v999rpx; color: $color-text; background: $color-accent; font-size: $font-size-v29rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p3; }
+.detail-actions { flex-shrink: 0; padding: 22rpx 28rpx calc(22rpx + env(safe-area-inset-bottom)); display: grid; grid-template-columns: minmax(164rpx, 1fr) minmax(0, 2.1fr); align-items: center; gap: 30rpx; border-top: 1rpx solid $color-border; background: $color-white; font-family: $font-body; }
+.detail-price { display: flex; flex-direction: column; gap: 6rpx; min-width: 0; }
+.detail-price__label { color: $color-textMuted; font-size: $font-size-v21rpx; line-height: $line-height-v1p4; }
+.detail-price__amount { display: flex; align-items: baseline; gap: 5rpx; }
+.detail-price__value { color: $color-accent; font-size: $font-size-v42rpx; font-weight: $font-weight-v700; line-height: $line-height-v1p3; }
+.detail-price__unit { color: $color-accent; font-size: $font-size-v22rpx; line-height: $line-height-v1p4; }
+.detail-actions button { height: 96rpx; margin: 0; padding: 0 28rpx; display: flex; justify-content: center; align-items: center; border-radius: $radius-v28rpx; color: $color-accentForeground; background: $color-accent; font-size: $font-size-v29rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p3; }
 .detail-actions button:active { opacity: .8; }
 .hero-button, .detail-actions button { border: 0; }
 .detail-host::after, .hero-button::after, .detail-actions button::after { border: 0; }
@@ -137,6 +140,6 @@ button:focus-visible { outline: 3rpx solid $color-primary; outline-offset: 3rpx;
 .detail-empty button { margin: 18rpx 0; color: $color-white; background: $color-primary; border-radius: $radius-v24rpx; font-size: $font-size-v28rpx; }
 @media (max-width: 350px) { .detail-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24rpx 0; } .detail-fact:nth-child(3)::before { display: none; } }
 /* #ifdef H5 */
-@media (min-width: 600px) { .detail-actions { left: 50%; right: auto; width: 960px; transform: translateX(-50%) scale(var(--qudaju-preview-scale, 1)); transform-origin: bottom center; } }
+.meetup-detail { height: var(--qudaju-preview-layout-height, 100dvh) !important; }
 /* #endif */
 </style>

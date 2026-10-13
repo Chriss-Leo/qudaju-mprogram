@@ -49,6 +49,9 @@ button,
 input,
 textarea { font-family: inherit; }
 
+/* Required pairing for every orange primary button. */
+.action-accent { background: $color-accent; color: $color-accentForeground; }
+
 button[disabled] { opacity: 0.48; }
 
 ::selection { color: $color-inverseWarm; background: $color-accent; }

@@ -7,6 +7,7 @@
 - Vue样式使用uni.scss提供的Sass变量；运行时属性从 `src/theme/index.ts` 导入theme。
 - `src/theme/generated.scss`和导航SVG由脚本生成，不可手改。修改配置后执行 `npm run theme:generate`。
 - 新页面优先使用语义色彩角色，禁止复制旧页面的compat颜色作为新方案。
+- 橙色按钮必须白字：背景accent，文字accentForeground；禁止黑字或其他文字色。新按钮使用action-accent通用样式。
 - 平台API固定的frontColor黑/白字面量是例外；组件独有几何位置和照片裁切不必提升为主题参数。
 - 修改后执行 `npm run type-check`（自动包含theme:check）与相应平台构建。完整使用说明见 `docs/THEME.md`。
 

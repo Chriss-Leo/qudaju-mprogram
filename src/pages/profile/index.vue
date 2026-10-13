@@ -44,15 +44,15 @@ onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor:
       </view>
       <view class="profile-links">
         <button v-for="item in primaryLinks" :key="item.label" class="profile-link profile-link--primary" @tap="pending(item.label)">
-          <UiIcon :name="item.icon" /><text>{{ item.label }}</text><UiIcon class="profile-link__chevron" name="chevron" tone="muted" />
+          <UiIcon :name="item.icon" /><text>{{ item.label }}</text><view class="profile-link__chevron"><UiIcon name="chevron" tone="muted" /></view>
         </button>
         <view class="compact-links">
           <button v-for="item in compactLinks" :key="item.label" class="profile-link" @tap="pending(item.label)">
-            <UiIcon :name="item.icon" /><text>{{ item.label }}</text><UiIcon class="profile-link__chevron" name="chevron" tone="muted" />
+            <UiIcon :name="item.icon" /><text>{{ item.label }}</text><view class="profile-link__chevron"><UiIcon name="chevron" tone="muted" /></view>
           </button>
         </view>
         <button v-for="item in utilityLinks" :key="item.label" class="profile-link" @tap="pending(item.label)">
-          <UiIcon :name="item.icon" /><text>{{ item.label }}</text><UiIcon class="profile-link__chevron" name="chevron" tone="muted" />
+          <UiIcon :name="item.icon" /><text>{{ item.label }}</text><view class="profile-link__chevron"><UiIcon name="chevron" tone="muted" /></view>
         </button>
       </view>
       <text class="demo-note">示例资料 · 当前为界面预览</text>
@@ -82,7 +82,8 @@ onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor:
 .profile-link { width: 100%; min-height: 126rpx; margin: 0; padding: 22rpx 26rpx; display: flex; align-items: center; gap: 22rpx; border-radius: $radius-v24rpx; color: $color-text; background: $color-card; font-size: $font-size-v29rpx; font-weight: $font-weight-v500; line-height: $line-height-v1p4; text-align: left; }
 .profile-link > text { flex: 1; min-width: 0; }
 .profile-link :deep(.ui-icon) { width: 54rpx; height: 54rpx; }
-.profile-link__chevron { width: 28rpx !important; height: 28rpx !important; }
+.profile-link__chevron { width: 54rpx; height: 54rpx; flex: 0 0 54rpx; display: flex; align-items: center; justify-content: center; }
+.profile-link__chevron :deep(.ui-icon) { width: 28rpx; height: 28rpx; }
 .compact-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22rpx; }
 .compact-links .profile-link { gap: 16rpx; padding: 20rpx; font-size: $font-size-v26rpx; }
 .compact-links .profile-link__chevron { display: none; }

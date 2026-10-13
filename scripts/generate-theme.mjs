@@ -14,7 +14,7 @@ export function generateTheme() {
   const body = lines.join("\n") + "\n";
   if (!fs.existsSync(out) || fs.readFileSync(out, "utf8") !== body) fs.writeFileSync(out, body);
   // Navigation glyph colors use the same source as CSS and Vue color props.
-  for (const [file, key] of Object.entries({ home: "primary", "home-muted": "iconMuted", profile: "primary", "profile-muted": "iconMuted", plus: "inverseWarm" })) {
+  for (const [file, key] of Object.entries({ home: "primary", "home-muted": "iconMuted", profile: "primary", "profile-muted": "iconMuted", plus: "accentForeground" })) {
     const target = path.join(root, "src/static/entry/icons", file + ".svg");
     const old = fs.readFileSync(target, "utf8");
     const next = old.replace(/fill="#[0-9a-fA-F]{3,8}"/g, 'fill="' + tokens.colors[key] + '"');
