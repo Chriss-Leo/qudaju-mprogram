@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import { unreadCount } from "../stores/meetups";
 type TabName = "home" | "discover" | "orders" | "profile";
 const props = defineProps<{ active: TabName; ownerRoute: string }>();
 const emit = defineEmits<{ (event: "discover"): void }>();
@@ -49,6 +50,7 @@ function profile() {
     </button>
     <button class="tabbar__item" :class="{ active: active === 'profile' }" aria-label="我的" @tap="profile">
       <image :src="active === 'profile' ? '/static/entry/icons/profile.svg' : '/static/entry/icons/profile-muted.svg'" mode="aspectFit" />
+      <view v-if="unreadCount" class="tabbar__unread" :aria-label="`${unreadCount}条未读消息`" />
       <text>我的</text>
     </button>
   </view>
@@ -63,6 +65,7 @@ function profile() {
 .tabbar__crest::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2rpx; height: 38rpx; background: $color-white; }
 .tabbar__item { position: relative; box-sizing: border-box; width: 100%; min-width: 0; height: 114rpx; padding: 8rpx 0; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7rpx; color: $color-textInactive; background: transparent; font-family: inherit; font-size: $font-size-v25rpx; line-height: $line-height-v1p3; font-weight: $font-weight-v500; transform: none; }
 .tabbar__item image { width: 50rpx; height: 50rpx; }
+.tabbar__unread { position: absolute; top: 12rpx; left: calc(50% + 17rpx); width: 14rpx; height: 14rpx; border: 2rpx solid $color-white; border-radius: $radius-v50percent; background: $color-accent; }
 .tabbar__item.active, .tabbar__discover { color: $color-text; font-weight: $font-weight-v600; }
 .tabbar__discover { justify-content: flex-end; padding-bottom: 10rpx; overflow: visible; }
 .tabbar__plus { position: absolute; left: 50%; top: -36rpx; transform: translateX(-50%); box-sizing: border-box; width: 108rpx; height: 108rpx; display: flex; align-items: center; justify-content: center; border: 3rpx solid $color-white; border-radius: $radius-v50percent; background: $color-accent; }

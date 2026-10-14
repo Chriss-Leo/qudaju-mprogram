@@ -26,6 +26,7 @@ onLaunch(() => {
 </script>
 
 <style lang="scss">
+@import "./styles/flows.scss";
 page {
   min-height: 100%;
   background: $color-compatF3F5F0;

@@ -5,12 +5,13 @@ import { theme } from "../../theme";
 import AppTabBar from "../../components/AppTabBar.vue";
 import SurfaceHeader from "../../components/SurfaceHeader.vue";
 import UiIcon from "../../components/UiIcon.vue";
+import { openFlow } from "../../utils/flow-navigation";
 
 const avatarFailed = ref(false);
 const primaryLinks = [{ label: "我的报名", icon: "calendar" }, { label: "我发起的", icon: "launch" }];
 const compactLinks = [{ label: "我的收藏", icon: "favorite" }, { label: "费用记录", icon: "wallet" }];
 const utilityLinks = [{ label: "客服与帮助", icon: "support" }, { label: "设置", icon: "settings" }];
-function pending(label: string) { uni.showToast({ title: label + "尚未接入，当前为界面预览", icon: "none" }); }
+function pending(label: string) { if (label === "我的报名") openFlow("my-registrations"); else if (label === "我发起的") openFlow("my-hosted"); else if (label === "消息") openFlow("messages"); else uni.showToast({ title: label + "尚未接入，当前为界面预览", icon: "none" }); }
 function publish() { uni.showToast({ title: "发布组局功能开发中", icon: "none" }); }
 onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: theme.colors.white }));
 </script>

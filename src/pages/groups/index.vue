@@ -4,7 +4,7 @@ import { computed, onUnmounted, ref, watch } from "vue";
 import { onResize, onShow } from "@dcloudio/uni-app";
 import AppTabBar from "../../components/AppTabBar.vue";
 import GroupFeedCard from "../../components/GroupFeedCard.vue";
-import { groupCards } from "../../mocks/group-cards";
+import { getGroup } from "../../stores/meetups";
 import BottomSheet from "../../components/BottomSheet.vue";
 import { services } from "../../mocks/services";
 
@@ -64,7 +64,7 @@ const displayedServices = computed(() => {
   let result = [...services].sort((a, b) => feedOrder.indexOf(a.id) - feedOrder.indexOf(b.id));
   const filters = appliedFilters.value;
   result = result.filter((item) => {
-    const group = groupCards[item.id];
+    const group = getGroup(item.id)!;
     if (filters.type !== "不限" && group.category !== filters.type) return false;
     if (filters.fee === "免费" && group.fund !== 0) return false;
     if (filters.fee === "收费" && group.fund === 0) return false;
@@ -144,7 +144,7 @@ function demo(message: string) { uni.showToast({ title: message, icon: "none" })
       <GroupFeedCard
         v-for="item in displayedServices"
         :key="item.id"
-        :group="groupCards[item.id]"
+        :group="getGroup(item.id)!"
         :distance="item.distance"
         @open="openService(item.id)"
       />

@@ -28,10 +28,16 @@ A方案运行时素材为独立生成的资产，不是从批准的整页UI图�
 
 ## 图标
 
+聊天关闭提示使用Phosphor的lock-key-fill实心带钥匙孔锁图标，通过主题脚本生成lock各色调SVG，不手改图标颜色。消息邀请底部说明复用同系列info信息图标。
+
 导航及A方案功能图标来自[Phosphor](https://github.com/phosphor-icons/core)，MIT；保留其授权说明，旧页面仍有uni-ui图标。`scripts/generate-theme.mjs`从主题配置生成五个导航SVG的颜色，以及功能图标的蓝/灰蓝/近黑版本。身份卡曲线接缝为同脚本生成的项目自有SVG，白色填充同样读取主题；这些生成文件不可手改。
+
+2026-10-14 报名与聊天页面复用既有独立照片、虚构头像与 Phosphor 图标，未新增整页截图底图。功能图标增加脚本生成的 `check` 及 `white` 色调，供邀请页白色 X / 勾使用；白色色值读取主题的 `accentForeground`。
 
 ## 非运行时参考
 
 `docs/design/card-layout-comparison.png`中B是已选卡片结构；三张旧详情概念图为历史参考，不是当前实现依据。`.impeccable/mocks/A-profile-detail.png`是用户批准的我的与组局详情参考，实际页面使用独立素材和真实组件，并保留原首页与导航；合同见同目录的 `a-contract.md`。`docs/brand/miniapp-icon.png`为保留的小程序对外图候选最终版，发布时仍需用户确认。
 
 旧候选图、提示词和大原图已可恢复归档，见清理记录。不把设计稿当作页面静态资源。
+
+`docs/design/review-20261014/` 为本次批准的报名与聊天参考稿；`local-tests/flows-20261014/` 为实现后 320/393/1200px 页面截图，包含成员、邀请、消息、聊天、关闭历史、报名记录、发起管理与申请页。参考稿只指导真实组件实现，验证截图也不代表真实用户、IM 或交易已接通；两类文件均不打包为运行时素材。

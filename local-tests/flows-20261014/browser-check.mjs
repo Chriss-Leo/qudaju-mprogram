@@ -1,0 +1,54 @@
+import { chromium } from '/Users/chris/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import assert from 'node:assert/strict';
+const browser = await chromium.launch();
+const errors = [];
+const routes = [['registrations','my-registrations',''],['hosted','my-hosted',''],['members','group-members','my-game'],['messages','messages',''],['invite','chat-invitation','invite-me'],['chat','chat','invite-active'],['history','chat','invite-history'],['apply','group-apply','guide-02']];
+const url = (route,id='') => `http://127.0.0.1:5173/#/pages/${route}/index${id ? '?id='+id : ''}`;
+if (!process.env.SKIP_SCREENSHOTS) for (const width of [393,320,1200]) {
+  const page = await browser.newPage({viewport:{width,height:852},deviceScaleFactor:1});
+  page.on('pageerror',error => errors.push(error.message));
+  for(const [name,route,id] of routes) {
+    await page.goto(url(route,id));
+    await page.locator('.flow-shell').waitFor();
+    await page.waitForFunction(()=>[...document.images].every(i=>i.complete));
+    await page.screenshot({path:`local-tests/flows-20261014/${name}-${width}.png`});
+    if(width<600) assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${name} overflow ${width}`);
+  }
+  await page.close();
+}
+const page = await browser.newPage({viewport:{width:393,height:852}});
+page.on('pageerror',error=>errors.push(error.message));
+await page.goto(url('profile'));
+await page.locator('.profile-link').filter({hasText:'我的报名'}).click();
+await page.locator('.registration-card').first().waitFor();
+assert.match(page.url(),/my-registrations/);
+await page.goto(url('chat-invitation','invite-me'));
+await page.locator('.invite-circle--accept').click();
+await page.locator('.chat-input').waitFor();
+await page.locator('.chat-input input').fill('测试消息，确认能发送。');
+await page.locator('.chat-composer .flow-button').click();
+await page.locator('.chat-bubble').filter({hasText:'测试消息，确认能发送。'}).waitFor();
+await page.reload();
+await page.locator('.chat-bubble').filter({hasText:'测试消息，确认能发送。'}).waitFor();
+await page.goto(url('my-registrations'));
+await page.locator('.registration-card').filter({hasText:'苏州河轻徒步'}).getByText('退出报名',{exact:true}).click();
+await page.locator('.uni-modal__btn_primary').click();
+await page.locator('.registration-card').filter({hasText:'苏州河轻徒步'}).getByText('已退出',{exact:true}).waitFor();
+await page.goto(url('chat','invite-me'));
+await page.locator('.chat-bubble').filter({hasText:'测试消息，确认能发送。'}).waitFor();
+assert.equal(await page.locator('.chat-input').count(),0);
+assert.equal(await page.locator('.chat-bubble').filter({hasText:'测试消息，确认能发送。'}).count(),1);
+await page.goto(url('group-members','game-01'));
+await page.getByText('仅局主可管理本局成员').waitFor();
+assert.equal(await page.locator('.member-invite-input').count(),0);
+await page.goto(url('chat','invite-host-pending'));
+await page.getByText('聊天尚未开启').waitFor();
+assert.equal(await page.locator('.chat-input').count(),0);
+await page.goto(url('group-members','my-game'));
+await page.getByText('发起聊天',{exact:true}).click();
+await page.locator('.member-invite-input textarea').fill('我们聊聊周末活动安排。');
+await page.getByText('发送聊天邀请',{exact:true}).click();
+await page.getByText('等待回应',{exact:true}).first().waitFor();
+assert.deepEqual(errors,[]);
+await browser.close();
+console.log('Screenshots 393/320/desktop, profile navigation, accept invite, send/persist, withdrawal closes composer, host access guard and invitation flow passed.');

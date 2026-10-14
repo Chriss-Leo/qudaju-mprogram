@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ name: string; tone?: "blue" | "muted" | "black" }>(), { tone: "blue" });
+withDefaults(defineProps<{ name: string; tone?: "blue" | "muted" | "black" | "white" }>(), { tone: "blue" });
 </script>
 
 <template><image class="ui-icon" :src="`/static/ui-icons/${name}-${tone}.svg`" mode="aspectFit" aria-hidden="true" /></template>

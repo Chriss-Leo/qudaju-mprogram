@@ -37,6 +37,34 @@
     {
       "path": "pages/provider/index",
       "style": { "navigationStyle": "custom", "navigationBarTitleText": "服务者中心" }
+    },
+    {
+      "path": "pages/my-registrations/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "我的报名", "disableScroll": true }
+    },
+    {
+      "path": "pages/my-hosted/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "我发起的", "disableScroll": true }
+    },
+    {
+      "path": "pages/group-members/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "报名成员", "disableScroll": true }
+    },
+    {
+      "path": "pages/messages/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "消息", "disableScroll": true }
+    },
+    {
+      "path": "pages/chat-invitation/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "聊天邀请", "disableScroll": true }
+    },
+    {
+      "path": "pages/chat/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "聊天", "disableScroll": true }
+    },
+    {
+      "path": "pages/group-apply/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "报名加入", "disableScroll": true }
     }
   ],
   "globalStyle": {

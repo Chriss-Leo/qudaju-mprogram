@@ -2,7 +2,8 @@
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { onLoad, onShow, onResize } from "@dcloudio/uni-app";
 import { theme } from "../../theme";
-import { groupCards } from "../../mocks/group-cards";
+import { getGroup, myRegistration, hostId, me, statusLabel, meetupState } from "../../stores/meetups";
+import { openFlow } from "../../utils/flow-navigation";
 import SurfaceHeader from "../../components/SurfaceHeader.vue";
 import UiIcon from "../../components/UiIcon.vue";
 import GroupPhotoGrid from "../../components/GroupPhotoGrid.vue";
@@ -13,7 +14,11 @@ const viewportHeight = ref(uni.getWindowInfo().windowHeight);
 onResize(({ size }) => { if (size) viewportHeight.value = size.windowHeight; });
 const imageFailed = ref(false);
 const hostFailed = ref(false);
-const group = computed(() => Object.prototype.hasOwnProperty.call(groupCards, groupId.value) ? groupCards[groupId.value] : undefined);
+const group = computed(() => getGroup(groupId.value));
+const registration = computed(() => myRegistration(groupId.value));
+const closed = computed(() => meetupState.ended.includes(groupId.value));
+const own = computed(() => hostId(groupId.value) === me.id);
+const applicationLabel = computed(() => own.value ? '管理报名成员' : closed.value ? '活动已结束' : registration.value && ['review','payment'].includes(registration.value.status) ? statusLabel[registration.value.status] : group.value?.isJoinedByMe ? '已报名' : group.value?.admission === '局主审核' ? '申请加入' : '报名加入');
 const tags: Record<string, string[]> = { 桌游: ["轻策略", "新手友好"], 陪拍: ["城市漫步", "互拍"], 向导: ["街区漫步", "城市故事"], 户外: ["轻徒步", "慢节奏"] };
 const facts = computed(() => group.value ? [
   { key: "time", value: group.value.time, label: "活动时间" },
@@ -55,7 +60,9 @@ onShow(() => { uni.setNavigationBarColor({ frontColor: "#000000", backgroundColo
 function back() { uni.navigateBack({ fail: () => uni.redirectTo({ url: "/pages/groups/index" }) }); }
 function preview() { const urls = group.value?.photos.slice(0, 3) || []; if (urls.length) uni.previewImage({ urls, current: urls[0] }); }
 function apply() {
-  uni.showModal({ title: "报名功能尚未接入", content: "当前为组局详情示例。报名、局主审核及付款将在后端联调后开放，本次不会提交申请或收款。", showCancel: false, confirmText: "知道了", confirmColor: theme.colors.primary });
+  if (own.value) openFlow('group-members', groupId.value);
+  else if (registration.value && ['review','payment','joined','ongoing'].includes(registration.value.status)) openFlow('my-registrations');
+  else if (!closed.value) openFlow('group-apply', groupId.value);
 }
 function hostInfo() { uni.showToast({ title: "局主信息卡片尚未接入", icon: "none" }); }
 </script>
@@ -97,7 +104,7 @@ function hostInfo() { uni.showToast({ title: "局主信息卡片尚未接入", i
         <text class="detail-price__label">{{ group.fund ? '活动基金' : '活动费用' }}</text>
         <view class="detail-price__amount"><text v-if="group.fund" class="detail-price__unit">¥</text><text class="detail-price__value">{{ group.fund || '免费' }}</text><text v-if="group.fund" class="detail-price__unit">/ 人</text></view>
       </view>
-      <button class="detail-apply action-accent" :class="{ 'detail-apply--joined': group.isJoinedByMe }" :disabled="group.isJoinedByMe" @tap="apply"><text>{{ group.isJoinedByMe ? '已报名' : group.admission === '局主审核' ? '申请加入' : '报名加入' }}</text></button>
+      <button class="detail-apply action-accent" :class="{ 'detail-apply--joined': group.isJoinedByMe || closed }" :disabled="closed && !own" @tap="apply"><text>{{ applicationLabel }}</text></button>
     </view>
   </view>
 </template>

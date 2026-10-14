@@ -1,0 +1,26 @@
+// Shared UI grammar for member, invitation, conversation and registration flows.
+.flow-content { padding: 24rpx 28rpx calc(36rpx + env(safe-area-inset-bottom)); }
+.flow-tabs { display: flex; align-items: center; border-bottom: 1rpx solid $color-border; padding: 0 28rpx; }
+.flow-tab { position: relative; display: flex; align-items: center; justify-content: center; flex: 1; min-height: 92rpx; min-width: 0; margin: 0; padding: 20rpx 4rpx; color: $color-textMuted; background: transparent; border-radius: $radius-v0; font-size: $font-size-v28rpx; line-height: $line-height-v1p4; }
+.flow-tab--active { color: $color-primary; font-weight: $font-weight-v600; }
+.flow-tab--active::before { content: ""; position: absolute; bottom: 0; left: 24%; right: 24%; height: 4rpx; border-radius: $radius-v999rpx; background: $color-primary; }
+.flow-card { padding: 28rpx; border: 1rpx solid $color-border; border-radius: $radius-v24rpx; background: $color-white; margin-bottom: 22rpx; }
+.flow-row { display: flex; align-items: center; gap: 20rpx; }
+.flow-copy { flex: 1; min-width: 0; }
+.flow-name { display: block; font-size: $font-size-v30rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p4; }
+.flow-muted { display: block; margin-top: 8rpx; color: $color-textMuted; font-size: $font-size-v24rpx; line-height: $line-height-v1p6; }
+.flow-badge { display: inline-flex; padding: 5rpx 14rpx; border-radius: $radius-v12rpx; background: $color-tag; color: $color-primary; font-size: $font-size-v23rpx; line-height: $line-height-v1p4; }
+.flow-badge--neutral { background: $color-registrationMuted; color: $color-textMuted; }
+.flow-button { display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 44px; margin: 0; padding: 12rpx 24rpx; border: 1px solid $color-primary; border-radius: $radius-v16rpx; background: transparent; color: $color-primary; font-size: $font-size-v25rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p4; white-space: nowrap; }
+.flow-button--muted { border-color: $color-borderStrong; color: $color-textMuted; }
+.flow-button.action-accent { border-color: $color-accent; background: $color-accent; color: $color-accentForeground; }
+.flow-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16rpx; margin-top: 24rpx; }
+.flow-notice { display: flex; align-items: center; gap: 14rpx; padding: 20rpx; border-radius: $radius-v16rpx; background: $color-card; color: $color-textMuted; font-size: $font-size-v24rpx; line-height: $line-height-v1p6; }
+.flow-empty { padding: 100rpx 36rpx; text-align: center; }
+.flow-empty > text:first-child { display: block; font-size: $font-size-v32rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p4; }
+.flow-empty > text:last-child { display: block; margin-top: 18rpx; color: $color-textMuted; font-size: $font-size-v26rpx; line-height: $line-height-v1p6; }
+.flow-button:not([disabled]):active, .flow-tab:active { opacity: .7; }
+.flow-button:focus-visible, .flow-tab:focus-visible { outline: 3rpx solid $color-primary; outline-offset: 3rpx; }
+.flow-button::after, .flow-tab::after { border: 0; }
+.flow-button[disabled] { border-color: $color-borderStrong; color: $color-textMuted; opacity: 1; }
+.flow-button.action-accent[disabled] { background: $color-registrationMuted; border-color: $color-registrationMuted; color: $color-textMuted; }

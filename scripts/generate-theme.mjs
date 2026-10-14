@@ -22,7 +22,7 @@ export function generateTheme() {
   }
   // One Phosphor family; generated glyph colors come only from theme tokens.
   const { icons, width, height } = JSON.parse(fs.readFileSync(path.join(root, "node_modules/@iconify-json/ph/icons.json"), "utf8"));
-  const glyphs = { message: "chat-circle-dots", calendar: "calendar-check", launch: "paper-plane-tilt", favorite: "star", wallet: "wallet", support: "headset", settings: "gear-six", chevron: "caret-right", back: "caret-left", clock: "clock", location: "map-pin", "event-time": "calendar-blank", "event-place": "map-pin", people: "users", info: "info", edit: "pencil-simple", share: "share-network", heart: "heart", close: "x" };
+  const glyphs = { message: "chat-circle-dots", calendar: "calendar-check", launch: "paper-plane-tilt", favorite: "star", wallet: "wallet", support: "headset", settings: "gear-six", chevron: "caret-right", back: "caret-left", clock: "clock", location: "map-pin", "event-time": "calendar-blank", "event-place": "map-pin", people: "users", info: "info", edit: "pencil-simple", share: "share-network", heart: "heart", close: "x", check: "check", lock: "lock-key-fill" };
   const dir = path.join(root, "src/static/ui-icons");
   fs.mkdirSync(dir, { recursive: true });
   // Exact vector seam, kept separate from text and the generated ticket illustration.
@@ -30,7 +30,7 @@ export function generateTheme() {
   for (const [name, glyph] of Object.entries(glyphs)) {
     const icon = icons[glyph];
     if (!icon) throw new Error("Missing Phosphor icon: " + glyph);
-    for (const [tone, key] of Object.entries({ blue: "primary", muted: "iconMuted", black: "text" })) {
+    for (const [tone, key] of Object.entries({ blue: "primary", muted: "iconMuted", black: "text", white: "accentForeground" })) {
       const color = tokens.colors[key];
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${icon.width || width} ${icon.height || height}" fill="${color}">${icon.body.replaceAll("currentColor", color)}</svg>`;
       fs.writeFileSync(path.join(dir, `${name}-${tone}.svg`), svg);

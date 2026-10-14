@@ -21,7 +21,7 @@ Vue/TypeScript从 `src/theme/index.ts` 导入 `theme`，使用 `theme.colors.pri
 
 ## 生成与检查
 
-`npm run theme:generate` 从JSON生成 `src/theme/generated.scss`，同步五个导航SVG的颜色。生成文件和SVG不是第二配置源，不得手改。
+`npm run theme:generate` 从JSON生成 `src/theme/generated.scss`，同步五个导航SVG及功能图标的颜色。生成文件和SVG不是第二配置源，不得手改。
 
 Vite启动/构建时自动生成；H5开发服务器监听tokens.json变更并更新样式。手动重建导航形状后也运行主题生成。
 
@@ -34,3 +34,5 @@ Vite启动/构建时自动生成；H5开发服务器监听tokens.json变更并�
 蓝色确认/筛选 `primary`，橙色重点操作 `accent`，黑色正文 `text`，浅灰白卡片 `card`。布局和行为不因主题修改而改变。
 
 强制配对：所有橙色按钮背景使用accent，文字必须使用白色accentForeground，不允许黑字。新按钮使用action-accent通用样式。详情底部免费或具体费用使用accent；辅助费用说明仍使用次级文字色。该白字/现有橙色配对为用户明确指定规范，不宣称满足普通文字的WCAG AA对比度。
+
+报名与聊天复用 `src/styles/flows.scss`：普通操作蓝色描边、主操作 `action-accent`、结束或禁用状态中性灰。`inviteReject` 与 `inviteAccept` 仅用于聊天邀请页红色拒绝圆钮与绿色接受圆钮，不作为通用错误/成功配色，也不改变已有页面身份。圆钮的白色 X / 勾使用 `UiIcon` 的 `white` 色调，读取 `accentForeground`；`check` 图形与白色版本均由主题脚本生成，不手写色号或修改 SVG。

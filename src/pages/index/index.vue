@@ -56,7 +56,7 @@ function publish() { uni.showToast({ title: "发布组局功能开发中", icon:
 .entry-cover__image { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
 .entry-cover__image--ready { opacity: 1; }
 .entry-cover__shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, $color-compatOverlay12, transparent 30%, transparent 52%, $color-compatOverlay13 72%, $color-compatOverlay14); }
-.entry-brand { position: absolute; left: 0; right: 0; top: 9%; display: flex; flex-direction: column; align-items: center; gap: 13rpx; color: $color-inverseWarm; }
+.entry-brand { position: absolute; left: 0; right: 0; top: 13%; display: flex; flex-direction: column; align-items: center; gap: 13rpx; color: $color-inverseWarm; }
 .entry-brand__logo { display: block; width: 380rpx; height: 100rpx; }
 .entry-brand__tagline { padding-left: 7rpx; font-size: $font-size-v27rpx; line-height: $line-height-v1p4; font-weight: $font-weight-v700; letter-spacing: 7rpx; color: $color-accent; }
 .entry-headline { position: absolute; top: 55%; left: 6.2%; right: 4%; color: $color-inverseWarm; font-family: $font-display; font-size: $font-size-v85rpx; font-weight: $font-weight-v350; line-height: $line-height-v1p23; letter-spacing: 0; }
