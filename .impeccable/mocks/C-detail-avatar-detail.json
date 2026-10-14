@@ -1,0 +1,7 @@
+{
+  "approved": false,
+  "concept": "C · 紧凑信息与报名流程",
+  "prompt": "趣搭局既定白蓝橙体系的组局详情手机长屏高保真设计稿。固定无下划线返回标题栏；照片、标题、简介；时间、区域、名额的三格信息；已报名头像横向堆叠为浅蓝区域；活动介绍、局主、提交申请到审核通过的两步流程；底部固定橙色费用文字与白字橙色申请加入按钮。同期列表卡为白底细描边图文卡，底部头像和价格同行。所有活动和头像是示例。",
+  "pairedList": "C-detail-avatar-list.png",
+  "source": "detail-avatar-explorations.html#C-detail"
+}

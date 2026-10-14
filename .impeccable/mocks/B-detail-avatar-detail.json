@@ -1,0 +1,7 @@
+{
+  "approved": false,
+  "concept": "B · 参与者优先",
+  "prompt": "趣搭局既定白蓝橙体系的组局详情手机长屏高保真设计稿。固定无下划线返回标题栏；活动照片与标题；醒目的已报名参与者横向叠头像模块，显示已报名 4 人、剩余 2 人；活动安排按时间、公开区域和名额纵向扫描；局主、说明、审核规则；底部固定橙色费用文字与白字橙色申请加入按钮。同期列表卡同样强调头像和余位。所有活动和头像是示例。",
+  "pairedList": "B-detail-avatar-list.png",
+  "source": "detail-avatar-explorations.html#B-detail"
+}

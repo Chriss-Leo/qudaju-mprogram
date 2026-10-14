@@ -1,0 +1,16 @@
+{
+  "created": "2026-10-14",
+  "purpose": "Independent sample photos and fictitious formally enrolled participant avatars; no real registration records.",
+  "avatars": {
+    "source": ".impeccable/mocks/participant-avatar-sheet.png",
+    "generationPrompt": ".impeccable/mocks/participant-avatar-sheet.json",
+    "processing": "Four 627x627 quadrants extracted, resized to 192x192 JPEG quality82.",
+    "files": ["participant-1.jpg", "participant-2.jpg", "participant-3.jpg", "participant-4.jpg"]
+  },
+  "photos": {
+    "sources": ["src/static/groups/game-strip.jpg", "src/static/groups/photo-strip.jpg", "src/static/groups/outdoor-strip.jpg"],
+    "processing": "718x718 tiles extracted at x=0/735/1470, resized to 640x640 JPEG quality82; only consumed tiles kept.",
+    "files": ["game-2.jpg", "game-3.jpg", "photo-1.jpg", "photo-2.jpg", "photo-3.jpg", "outdoor-1.jpg", "outdoor-2.jpg"]
+  },
+  "approval": "2026-10-14 user: ok开始修改; references local-tests/detail-refresh-20261014 and accepted activity-introduction mock."
+}

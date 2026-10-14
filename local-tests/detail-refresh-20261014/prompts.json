@@ -1,0 +1,15 @@
+{
+  "approved": true,
+  "engine": "built-in imagegen",
+  "purpose": "标题单行、详情发起人头像昵称、列表1至3张照片布局",
+  "prompts": [
+    "Edit this full detail UI design precisely. Preserve white/blue/orange family, top safe statusbar, fixed back+centered 组局详情+WeChatcapsule with NOline underneath, largephoto, continuouswhitecontentplane, time/location, horizontaloverlapenrolledavatars4/6, and fixed orangefee 免费 plus orangeCTA 申请加入 WHITEtext NOarrow. REQUIRED CHANGES: activity title MUST be EXACT 周六桌游局，新手也能来 on ONE SINGLE LINE. Fit the line naturally by reducing title size to about22 logicalpx medium/semibold, never condensed/deformed text, never wrap. Tags unchanged. Immediately after tags insert a compact organizer row: circular orangehoodie avatar 36logicalpx beside nickname 阿橙, muted small 发起人 label as supporting text; it must be unmistakably avatar PLUS nickname, NOT text-only. Remove duplicate organizer at bottom. Rebalance freed space by revealing 活动介绍 with exacttext 带你从轻策略开始，一起认识新朋友。 near lower scrollarea. No giant blankband, no new claims, no header divider, no changes to footercolor/text. Keep priceorange, CTAwhite. Photographicavatars remain circleswhite2pxringsoverlap25%. Output completeflatportraitmobileviewport,nobezelexterior.",
+    "Create a high-fidelity UI SPEC comparison image for 趣搭局 showing EXACTLY THREE list card image-count states: 1 photo, 2 photos, 3 photos. Reference1 is only established LIST UI styling; reference2 is only tabletop activityphotography. Tallportraitcanvas around1080x2500, three fullwidthcardexamples vertically stacked, readableChinese atphonewidth, not a device mockup. Whiteblueorange establishedUI: #FFFFFFwhite,#1F1F1Ftext,#1C4A9Cblueutilities,#FA704Borangefees,pale#F7F8FAonly ifneeded. ModernPingFang-likeSans,20logicalpxgutters,mild14pxphotoedges. Three sections have small restrained OUTSIDE-card captions 1张照片 / 2张照片 / 3张照片 to make comparison clear, no extra instructional prose. All threecards SAMEactivity with compacthostavatarplusnickname 阿橙, gray 局主审核, blue 桌游tag; SINGLE-LINE title EXACT 周六桌游局，新手也能来, medium19logicalpx; sentence 带你从轻策略开始，一起认识新朋友。 Photographygrid DIFFERENTpercount: STATE1 ONE SINGLE wide landscape3:2photo oftabletopgroup, fillsavailablecardwidth; STATE2 TWO equalSQUARE photos side-by-side, NO thirdphoto/emptytile, leftgroup scene/righttabletopdetail; STATE3 THREE equalSQUARE photos IN ONEHORIZONTALROW, NOT wideleft+narrowstack and not2+1, photo1friendlyplayers,photo2boardgamecards/table,photo3differentcandidplayersangle. 4pxgridgaps,noimageoverlaytext. Eachcard belowphotos hasblueoutlineclock 周六14:00 and pin 静安寺, then FOUR distinct overlappingcircularphotographicavatarsonleftwith2pxwhiterings+4 / 6 已报名, orange 免费 onright. Photo count rules are the corevisualmessage; do notchange activitydataacrosscards. No pageheader/tabbar needed in this componentcomparison. No nestedframes, gradients, decorativebadges, fakeclaims. Fillcanvasnaturally withthreerealcardexamples, substantialspacingbutnogiantblanklowerband. Sampleidentitiesonly."
+  ],
+  "photoRules": {
+    "one": "单张横向大图",
+    "two": "两张等宽并排",
+    "three": "三张等宽横排"
+  },
+  "scope": "设计评审稿，未修改运行页面。"
+}

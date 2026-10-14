@@ -1,0 +1,19 @@
+{
+  "approved": false,
+  "engine": "built-in imagegen",
+  "screens": [
+    "01-detail-top.png",
+    "02-detail-more.png",
+    "03-group-list.png"
+  ],
+  "correctionPrompts": [
+    "Edit this UI mockup with surgical precision. Reference image1 is EDIT TARGET, image2 is SAME UI's FIRST VIEWPORT for header reference. Preserve all content, typography, imagery, avatar stacks, white/blue/orange palette and footer in image1. Change ONLY top header: recreate the same persistent status safe area/statusbar and fixed back + centered 组局详情 + WeChat capsule arrangement as image2. There must be NO horizontal divider/line under this header. All other horizontal content separators may stay. Maintain portrait393:852ratio and comfortably readable content, don't clip CTA. No new text, claims or sections.",
+    "Edit this Chinese mini-program LIST UI with precise content corrections; image1 is EDIT TARGET and image2 only tabletop photography source. Preserve existing elegant white/blue/orange layout, headerfilters, fixed bottomnav, titles, times, areas, avatarstacks, prices, typography and spacing. Change ONLY: first card's THREE-PHOTO collage must be actual tabletop meetup photos, NOT headshot portraits: keep widegroupimage left, replace top-right portrait with a cropped boardgame table/cards detail from image2, replace bottom-right portrait with friendly groupplayers crop from image2. Second card host must be 夏夏 (not 阿橙), hostavatar must be a friendly woman not orangehoodieman. Second card description MUST exact 手机或相机都可以，彼此做模特，记录城市里的好时光。 Keep secondtitle 梧桐街区，边走边互拍; 周日15:00, 衡山路, 3/5 已报名, ¥35/人. Give horizontal participantstacks a consistent2pxwhite separationring, with clear overlap instead of isolated circles. Nothing else changes. No newclaims. Ensure allfooterlabels/capsule readable, no overlapwithnav."
+  ],
+  "scope": "设计评审稿，尚未应用到小程序；头像、活动与照片均为示例。",
+  "skillContribution": {
+    "designTaste": "重排摄影与内容层级、统一连续内容面板",
+    "guizang": "首屏→介绍与加入规则→列表的组图阅读节奏"
+  },
+  "checks": "已人工检查中文、人物裁切、活动数据、固定栏及横向头像；未运行DOM自动验证。"
+}
