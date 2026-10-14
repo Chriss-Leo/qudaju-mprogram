@@ -5,10 +5,11 @@ import FlowShell from "../../components/FlowShell.vue";
 import FlowAvatar from "../../components/FlowAvatar.vue";
 import ActivityContext from "../../components/ActivityContext.vue";
 import BottomSheet from "../../components/BottomSheet.vue";
-import { effectiveStatus, hostId, me, meetupState, people, requestInvitation, reviewMember, statusLabel, type Registration } from "../../stores/meetups";
+import { effectiveStatus, isMyHost, meetupState, people, requestInvitation, reviewMember, statusLabel, type Registration } from "../../stores/meetups";
+import { isAuthenticated } from "../../stores/auth";
 import { flowError, openFlow } from "../../utils/flow-navigation";
 const id = useFlowId("group-members"); const tab = ref("已报名"); const selected = ref<Registration>(); const note = ref("");
-const authorized = computed(() => hostId(id.value) === me.id);
+const authorized = computed(() => isMyHost(id.value));
 const registrations = computed(() => authorized.value ? meetupState.registrations.filter(r => r.groupId === id.value) : []);
 const members = computed(() => registrations.value.filter(r => tab.value === "待审核" ? effectiveStatus(r) === "review" : ["joined", "ongoing", "ended"].includes(effectiveStatus(r))));
 function invitation(r: Registration) { return meetupState.invitations.slice().reverse().find(i => i.groupId === r.groupId && i.to === r.userId && (effectiveStatus(r) === 'ended' || !i.closed)); }
@@ -25,7 +26,7 @@ function review(r: Registration, approve: boolean) { uni.showModal({ title: appr
       <view v-if="!members.length" class="flow-empty"><text>{{ tab === '待审核' ? '没有待审核的申请' : '还没有报名成员' }}</text><text>成员报名后会显示在这里。</text></view><view class="flow-notice">仅可邀请报名本局的成员，接受后开启聊天。</view>
     </view><view v-else class="flow-empty"><text>仅局主可管理本局成员</text><text>请从「我发起的」进入自己的活动。</text></view>
   </FlowShell>
-  <BottomSheet :visible="!!selected" title="成员信息与聊天邀请" @close="selected = undefined"><view v-if="selected" class="member-sheet"><view class="flow-row"><FlowAvatar :person="people[selected.userId]" /><view class="flow-copy"><text class="flow-name">{{ people[selected.userId].nickname }}</text><text class="flow-muted">已报名本局 · 不公开联系方式</text></view></view><text class="flow-muted">报名留言：{{ selected.note || '未留言' }}</text><textarea v-model="note" class="member-invite-input" :maxlength="120" placeholder="写一句邀请，说明想聊什么" /><button class="flow-button action-accent" @tap="send">发送聊天邀请</button></view></BottomSheet>
+  <BottomSheet :visible="isAuthenticated && authorized && !!selected" title="成员信息与聊天邀请" @close="selected = undefined"><view v-if="selected" class="member-sheet"><view class="flow-row"><FlowAvatar :person="people[selected.userId]" /><view class="flow-copy"><text class="flow-name">{{ people[selected.userId].nickname }}</text><text class="flow-muted">已报名本局 · 不公开联系方式</text></view></view><text class="flow-muted">报名留言：{{ selected.note || '未留言' }}</text><textarea v-model="note" class="member-invite-input" :maxlength="120" placeholder="写一句邀请，说明想聊什么" /><button class="flow-button action-accent" @tap="send">发送聊天邀请</button></view></BottomSheet>
 </template>
 <style scoped lang="scss">
 .members-context { padding: 12rpx 28rpx 20rpx; }

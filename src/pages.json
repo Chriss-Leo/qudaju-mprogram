@@ -11,6 +11,10 @@
       "style": { "navigationStyle": "custom", "navigationBarTitleText": "趣搭局", "navigationBarTextStyle": "white", "disableScroll": true }
     },
     {
+      "path": "pages/login/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "微信登录" }
+    },
+    {
       "path": "pages/groups/index",
       "style": { "navigationStyle": "custom", "navigationBarTitleText": "同城好局", "navigationBarTextStyle": "black", "disableScroll": true }
     },

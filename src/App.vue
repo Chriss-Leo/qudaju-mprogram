@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onLaunch } from "@dcloudio/uni-app";
 import { getPlatformAdapter } from "./platforms";
+import { installAuthNavigation } from "./utils/auth-navigation";
 
 onLaunch(() => {
   getPlatformAdapter().bootstrap();
+  installAuthNavigation();
 
   // H5 is also our desktop review surface. uni-app resolves rpx against the
   // browser viewport, so a wide browser needs a proportional phone-canvas

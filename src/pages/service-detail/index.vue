@@ -2,8 +2,9 @@
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { onLoad, onShow, onResize } from "@dcloudio/uni-app";
 import { theme } from "../../theme";
-import { getGroup, myRegistration, hostId, me, statusLabel, meetupState } from "../../stores/meetups";
+import { getGroup, myRegistration, isMyHost, statusLabel, meetupState } from "../../stores/meetups";
 import { openFlow } from "../../utils/flow-navigation";
+import { ensureLogin } from "../../utils/auth-navigation";
 import SurfaceHeader from "../../components/SurfaceHeader.vue";
 import UiIcon from "../../components/UiIcon.vue";
 import GroupPhotoGrid from "../../components/GroupPhotoGrid.vue";
@@ -17,7 +18,7 @@ const hostFailed = ref(false);
 const group = computed(() => getGroup(groupId.value));
 const registration = computed(() => myRegistration(groupId.value));
 const closed = computed(() => meetupState.ended.includes(groupId.value));
-const own = computed(() => hostId(groupId.value) === me.id);
+const own = computed(() => isMyHost(groupId.value));
 const applicationLabel = computed(() => own.value ? '管理报名成员' : closed.value ? '活动已结束' : registration.value && ['review','payment'].includes(registration.value.status) ? statusLabel[registration.value.status] : group.value?.isJoinedByMe ? '已报名' : group.value?.admission === '局主审核' ? '申请加入' : '报名加入');
 const tags: Record<string, string[]> = { 桌游: ["轻策略", "新手友好"], 陪拍: ["城市漫步", "互拍"], 向导: ["街区漫步", "城市故事"], 户外: ["轻徒步", "慢节奏"] };
 const facts = computed(() => group.value ? [
@@ -60,6 +61,7 @@ onShow(() => { uni.setNavigationBarColor({ frontColor: "#000000", backgroundColo
 function back() { uni.navigateBack({ fail: () => uni.redirectTo({ url: "/pages/groups/index" }) }); }
 function preview() { const urls = group.value?.photos.slice(0, 3) || []; if (urls.length) uni.previewImage({ urls, current: urls[0] }); }
 function apply() {
+  if (!ensureLogin(`/pages/service-detail/index?id=${encodeURIComponent(groupId.value)}`)) return;
   if (own.value) openFlow('group-members', groupId.value);
   else if (registration.value && ['review','payment','joined','ongoing'].includes(registration.value.status)) openFlow('my-registrations');
   else if (!closed.value) openFlow('group-apply', groupId.value);

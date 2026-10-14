@@ -1,5 +1,13 @@
 # 开发指南
 
+## 微信登录接入
+
+Go 身份服务配置、迁移与启动见 [backend/README.md](../backend/README.md)。前端复制根目录 `.env.example` 为 `.env.local`，设置 `VITE_IDENTITY_BASE_URL` 后重启开发服务或重新构建；生产必须 HTTPS。不要将微信 AppSecret 放入 VITE 环境变量、小程序包或提交记录。
+
+微信适配层调用 `uni.login`，一次性 code 交给 Go 服务换取业务会话。H5、支付宝、小红书暂不提供微信登录替身。私有页通过 `AuthBoundary` 隐藏未授权内容，统一导航拦截转登录后返回原页面；缓存恢复必须调用 `/me`。发布入口目前仍是待接入功能，登录不会把它变成真实发布接口。
+
+会话键为 `qudaju-auth-session-v1`，本地流程键为 `qudaju-local-meetups-v2:<服务端用户ID>`。新账号从空个人记录开始，不迁移旧固定身份的 v1 数据。下方固定 `me` 与截图测试是登录门禁加入前的历史调试记录，不适用于匿名访问私有页；`me` 现在仅为本地参与者别名，不能作为服务端授权身份。
+
 ## 启动与检查
 
 ```bash

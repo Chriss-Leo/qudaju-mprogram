@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthBoundary from "../../components/AuthBoundary.vue";
 import AppTabBar from "../../components/AppTabBar.vue";
 import { getPlatformAdapter } from "../../platforms";
 
@@ -11,6 +12,7 @@ function demo(message: string) {
 </script>
 
 <template>
+  <AuthBoundary>
   <view class="order-page">
     <view class="top-nav">
       <button class="back" aria-label="返回" @tap="back"><view /></button>
@@ -58,6 +60,7 @@ function demo(message: string) {
 
     <AppTabBar active="orders" owner-route="pages/order-detail/index" />
   </view>
+  </AuthBoundary>
 </template>
 
 <style scoped lang="scss">

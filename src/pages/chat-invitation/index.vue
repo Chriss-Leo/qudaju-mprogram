@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import { useFlowId } from "../../utils/use-flow-id";
+import { isAuthenticated } from "../../stores/auth";
 import FlowShell from "../../components/FlowShell.vue";
 import FlowAvatar from "../../components/FlowAvatar.vue";
 import ActivityContext from "../../components/ActivityContext.vue";
@@ -10,7 +11,7 @@ import { flowError, openFlow } from "../../utils/flow-navigation";
 const id = useFlowId("chat-invitation");
 const invitation = computed(() => meetupState.invitations.find(i => i.id === id.value && i.to === me.id));
 const pending = computed(() => invitation.value?.status === "pending" && relationshipActive(invitation.value));
-watch(invitation, value => { if (value) value.read = true; });
+watch([invitation, isAuthenticated], ([value, authenticated]) => { if (value && authenticated) value.read = true; });
 function respond(accept: boolean) { try { respondInvitation(id.value, accept); if (accept) uni.redirectTo({ url: `/pages/chat/index?id=${encodeURIComponent(id.value)}` }); } catch (error) { flowError(error); } }
 </script>
 <template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthBoundary from "../../components/AuthBoundary.vue";
 import { computed, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { services } from "../../mocks/services";
@@ -32,6 +33,7 @@ async function submitOrder() {
 </script>
 
 <template>
+  <AuthBoundary>
   <view class="submit-page">
     <view class="top-nav"><button aria-label="返回" @tap="back"><view /></button><text>确认订单</text><view /></view>
 
@@ -63,6 +65,7 @@ async function submitOrder() {
       <button :loading="submitting" @tap="submitOrder">微信/平台支付</button>
     </view>
   </view>
+  </AuthBoundary>
 </template>
 
 <style scoped lang="scss">

@@ -1,13 +1,14 @@
 import { reactive, computed, watch } from "vue";
 import { groupCards, type GroupCardData, type GroupParticipant } from "../mocks/group-cards";
+import { assertAuthenticated, authState, isAuthenticated } from "./auth";
 
 // Local interaction model only. A server must independently enforce every rule.
 export type RegistrationStatus = "review" | "payment" | "joined" | "ongoing" | "ended" | "withdrawn" | "rejected" | "cancelled";
 export interface Registration { id: string; groupId: string; userId: string; status: RegistrationStatus; note: string }
 export interface Invitation { id: string; groupId: string; from: string; to: string; status: "pending" | "accepted" | "rejected"; note: string; read: boolean; closed?: boolean }
 export interface ChatMessage { id: string; invitationId: string; sender: string; text: string; time: number }
-interface State { version: 1; registrations: Registration[]; invitations: Invitation[]; messages: ChatMessage[]; ended: string[]; notificationsRead: boolean }
-export const me: GroupParticipant = { id: "me", nickname: "周末探险家", avatar: "/static/profile-a/profile-avatar.jpg" };
+interface State { version: 2; registrations: Registration[]; invitations: Invitation[]; messages: ChatMessage[]; ended: string[]; notificationsRead: boolean; owned: string[] }
+export const me = reactive<GroupParticipant>({ id: "me", nickname: "微信用户", avatar: "" });
 export const people: Record<string, GroupParticipant> = { me };
 Object.entries(groupCards).forEach(([id, group]) => {
   people[`owner-${id}`] = { id: `owner-${id}`, nickname: group.host, avatar: group.hostAvatar };
@@ -20,7 +21,7 @@ const activities: Record<string, GroupCardData> = {
 };
 export const hostId = (id: string) => id === "my-game" ? me.id : id === "past-game" ? "owner-game-01" : `owner-${id}`;
 const fresh = (): State => ({
-  version: 1, ended: ["past-game"], notificationsRead: false,
+  version: 2, ended: ["past-game"], notificationsRead: false, owned: ["my-game"],
   registrations: [
     { id: "r-review", groupId: "game-01", userId: me.id, status: "review", note: "我是新手，想一起学玩。" },
     { id: "r-payment", groupId: "photo-01", userId: me.id, status: "payment", note: "带相机一起互拍。" },
@@ -46,18 +47,20 @@ const fresh = (): State => ({
     { id: "m5", invitationId: "invite-host-accepted", sender: "sample-3", text: "周末见！我可以帮忙讲规则。", time: Date.now() - 30000 },
   ],
 });
-const key = "qudaju-local-meetups-v1";
+let scope = authState.session?.user.id || "guest";
+const key = () => `qudaju-local-meetups-v2:${scope}`;
+function emptyAccount(): State { return { version: 2, registrations: [], invitations: [], messages: [], ended: [], owned: [], notificationsRead: true }; }
 function restore(): State {
   try {
-    const s = uni.getStorageSync(key) as State;
+    const s = uni.getStorageSync(key()) as State;
     const statuses = ["review", "payment", "joined", "ongoing", "ended", "withdrawn", "rejected", "cancelled"];
-    if (s?.version === 1 && Array.isArray(s.registrations) && Array.isArray(s.invitations) && Array.isArray(s.messages) && Array.isArray(s.ended)
+    if (s?.version === 2 && Array.isArray(s.owned) && s.owned.every(id => id === 'my-game') && Array.isArray(s.registrations) && Array.isArray(s.invitations) && Array.isArray(s.messages) && Array.isArray(s.ended)
       && s.registrations.every(r => r && typeof r.id === "string" && !!activities[r.groupId] && !!people[r.userId] && statuses.includes(r.status) && typeof r.note === "string")
       && s.invitations.every(i => i && typeof i.id === "string" && !!activities[i.groupId] && !!people[i.from] && !!people[i.to] && i.from === hostId(i.groupId) && i.to !== i.from && ["pending", "accepted", "rejected"].includes(i.status) && typeof i.note === "string" && typeof i.read === "boolean" && (i.closed === undefined || typeof i.closed === "boolean"))
       && s.messages.every(m => m && typeof m.id === "string" && typeof m.invitationId === "string" && !!people[m.sender] && typeof m.text === "string" && Number.isFinite(m.time))
       && s.ended.every(id => typeof id === "string" && !!activities[id]) && typeof s.notificationsRead === "boolean") return s;
   } catch { /* Malformed/older local data falls back to fixtures. */ }
-  return fresh();
+  return scope === 'guest' ? fresh() : emptyAccount();
 }
 const initial = restore();
 initial.invitations.forEach(i => {
@@ -65,38 +68,43 @@ initial.invitations.forEach(i => {
   if (!r || !["review", "payment", "joined", "ongoing"].includes(r.status) || initial.ended.includes(i.groupId)) i.closed = true;
 });
 export const meetupState = reactive<State>(initial);
-watch(meetupState, () => { try { uni.setStorageSync(key, JSON.parse(JSON.stringify(meetupState))); } catch { uni.showToast({ title: "本地保存失败，请检查存储空间", icon: "none" }); } }, { deep: true });
-export const myRegistration = (groupId: string) => meetupState.registrations.find(r => r.groupId === groupId && r.userId === me.id);
+let changingScope = false;
+watch(meetupState, () => { if (changingScope || !isAuthenticated.value) return; try { uni.setStorageSync(key(), JSON.parse(JSON.stringify(meetupState))); } catch { uni.showToast({ title: "本地保存失败，请检查存储空间", icon: "none" }); } }, { deep: true, flush: "sync" });
+watch(() => authState.session?.user.id, id => {
+  changingScope = true; scope = id || 'guest'; Object.assign(meetupState, restore()); changingScope = false;
+  me.nickname = authState.session?.user.nickname || '微信用户'; me.avatar = authState.session?.user.avatarUrl || '';
+}, { flush: 'sync', immediate: true });
+export const isMyHost = (id: string) => isAuthenticated.value && hostId(id) === me.id && meetupState.owned.includes(id);
+export const myRegistration = (groupId: string) => isAuthenticated.value ? meetupState.registrations.find(r => r.groupId === groupId && r.userId === me.id) : undefined;
 export const isFormal = (status?: RegistrationStatus) => status === "joined" || status === "ongoing";
 export const effectiveStatus = (r: Registration): RegistrationStatus => meetupState.ended.includes(r.groupId) && isFormal(r.status) ? "ended" : r.status;
 export const statusLabel: Record<RegistrationStatus, string> = { review: "待审核", payment: "待付款", joined: "已报名", ongoing: "活动中", ended: "已结束", withdrawn: "已退出", rejected: "未通过", cancelled: "已取消" };
 export function getGroup(id: string): GroupCardData | undefined {
   const g = Object.prototype.hasOwnProperty.call(activities, id) ? activities[id] : undefined; if (!g) return undefined;
+  if (id === 'my-game' && !isMyHost(id)) return undefined;
   const roster = g.participants.map(p => ({ ...p }));
-  // Existing counts include the host. Local current-user state adjusts one seat.
-  const baselineHasMe = !!g.isJoinedByMe;
+  // Public sample counts include the host, but never imply this account is enrolled.
   const r = myRegistration(id);
   const hasMe = isFormal(r?.status) || r?.status === "ended";
-  if (baselineHasMe && roster.length > 1) roster[roster.length - 1] = me;
-  if (hasMe && !baselineHasMe) roster.push(me);
-  if (!hasMe && baselineHasMe) { const index = roster.findIndex(p => p.id === me.id); if (index >= 0) roster.splice(index, 1); }
+  if (hasMe) roster.push(me);
   if (id === "my-game") {
     const members = meetupState.registrations.filter(r => r.groupId === id && isFormal(r.status)).map(r => people[r.userId]);
-    return { ...g, participants: [me, ...members], joined: members.length + 1, isJoinedByMe: false };
+    return { ...g, host: me.nickname, hostAvatar: me.avatar, participants: [me, ...members], joined: members.length + 1, isJoinedByMe: false };
   }
-  return { ...g, participants: roster, joined: g.joined + Number(hasMe) - Number(baselineHasMe), isJoinedByMe: hasMe };
+  return { ...g, participants: roster, joined: g.joined + Number(hasMe), isJoinedByMe: hasMe };
 }
-export const unreadCount = computed(() => meetupState.invitations.filter(i => i.to === me.id && i.status === "pending" && !i.read && relationshipActive(i)).length + Number(!meetupState.notificationsRead));
+export const unreadCount = computed(() => isAuthenticated.value ? meetupState.invitations.filter(i => i.to === me.id && i.status === "pending" && !i.read && relationshipActive(i)).length + Number(!meetupState.notificationsRead) : 0);
 export function relationshipActive(i: Invitation) {
   if (i.closed) return false;
   const registration = meetupState.registrations.find(r => r.groupId === i.groupId && r.userId === i.to);
   return !!registration && ["review", "payment", "joined", "ongoing"].includes(registration.status) && !meetupState.ended.includes(i.groupId);
 }
-export function canChat(i?: Invitation) { return !!i && i.status === "accepted" && (i.from === me.id || i.to === me.id) && relationshipActive(i); }
+export function canChat(i?: Invitation) { return isAuthenticated.value && !!i && i.status === "accepted" && (i.from === me.id || i.to === me.id) && relationshipActive(i); }
 export function myConversation(groupId: string) { return meetupState.invitations.slice().reverse().find(i => i.groupId === groupId && i.to === me.id && i.status === "accepted"); }
 const uid = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 export function requestInvitation(groupId: string, userId: string, note: string): string {
-  if (hostId(groupId) !== me.id || userId === me.id) throw new Error("仅局主可以向本局报名成员发起邀请");
+  assertAuthenticated();
+  if (!isMyHost(groupId) || userId === me.id) throw new Error("仅局主可以向本局报名成员发起邀请");
   const r = meetupState.registrations.find(r => r.groupId === groupId && r.userId === userId);
   if (!r || !["review", "payment", "joined", "ongoing"].includes(r.status) || meetupState.ended.includes(groupId)) throw new Error("该报名关系已失效");
   const existing = meetupState.invitations.find(i => i.groupId === groupId && i.to === userId && !i.closed);
@@ -106,11 +114,13 @@ export function requestInvitation(groupId: string, userId: string, note: string)
   return id;
 }
 export function respondInvitation(id: string, accept: boolean) {
+  assertAuthenticated();
   const i = meetupState.invitations.find(i => i.id === id);
   if (!i || i.to !== me.id || i.status !== "pending" || !relationshipActive(i)) throw new Error("邀请已失效或已处理");
   i.status = accept ? "accepted" : "rejected"; i.read = true;
 }
 export function sendMessage(id: string, text: string) {
+  assertAuthenticated();
   const i = meetupState.invitations.find(i => i.id === id);
   if (!canChat(i)) throw new Error("聊天尚未开启或已经关闭");
   const content = text.trim(); if (!content) return;
@@ -118,6 +128,7 @@ export function sendMessage(id: string, text: string) {
   meetupState.messages.push({ id: uid("message"), invitationId: id, sender: me.id, text: content, time: Date.now() });
 }
 export function applyToGroup(groupId: string, note: string) {
+  assertAuthenticated();
   const g = getGroup(groupId); if (!g || meetupState.ended.includes(groupId) || hostId(groupId) === me.id) throw new Error("当前活动无法报名");
   const existing = myRegistration(groupId);
   if (existing && ["review", "payment", "joined", "ongoing"].includes(existing.status)) return existing;
@@ -128,6 +139,7 @@ export function applyToGroup(groupId: string, note: string) {
   return r;
 }
 export function withdraw(id: string) {
+  assertAuthenticated();
   const r = meetupState.registrations.find(r => r.id === id);
   if (!r || r.userId !== me.id || !["review", "payment", "joined", "ongoing"].includes(effectiveStatus(r))) throw new Error("当前报名状态不能退出");
   if (isFormal(r.status) && (getGroup(r.groupId)?.fund || 0) > 0) throw new Error("收费局退款规则尚待接入，请联系活动方处理");
@@ -135,19 +147,22 @@ export function withdraw(id: string) {
   meetupState.invitations.filter(i => i.groupId === r.groupId && i.to === r.userId).forEach(i => { i.closed = true; });
 }
 export function simulatePayment(id: string) {
+  assertAuthenticated();
   const r = meetupState.registrations.find(r => r.id === id); const g = r && getGroup(r.groupId);
   if (!r || !g || r.userId !== me.id || r.status !== "payment" || meetupState.ended.includes(r.groupId)) throw new Error("当前无法付款");
   if (g.joined >= g.capacity) throw new Error("名额已满，暂不能占正式名额");
   r.status = "joined";
 }
 export function reviewMember(id: string, approve: boolean) {
+  assertAuthenticated();
   const r = meetupState.registrations.find(r => r.id === id); const g = r && getGroup(r.groupId);
-  if (!r || !g || hostId(r.groupId) !== me.id || r.status !== "review" || meetupState.ended.includes(r.groupId)) throw new Error("当前无法审核");
+  if (!r || !g || !isMyHost(r.groupId) || r.status !== "review" || meetupState.ended.includes(r.groupId)) throw new Error("当前无法审核");
   if (approve && !g.fund && g.joined >= g.capacity) throw new Error("名额已满");
   r.status = approve ? g.fund ? "payment" : "joined" : "rejected";
 }
 export function endGroup(groupId: string) {
-  if (hostId(groupId) !== me.id) throw new Error("仅局主可以结束本局");
+  assertAuthenticated();
+  if (!isMyHost(groupId)) throw new Error("仅局主可以结束本局");
   if (!meetupState.ended.includes(groupId)) meetupState.ended.push(groupId);
   meetupState.invitations.filter(i => i.groupId === groupId).forEach(i => { i.closed = true; });
   meetupState.registrations.filter(r => r.groupId === groupId && ["review", "payment"].includes(r.status)).forEach(r => { r.status = "cancelled"; });

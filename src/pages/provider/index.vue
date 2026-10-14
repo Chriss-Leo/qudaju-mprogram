@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthBoundary from "../../components/AuthBoundary.vue";
 const workbench = [
   { label: "发布服务", icon: "publish" },
   { label: "档期管理", icon: "calendar" },
@@ -10,6 +11,7 @@ function demo(title: string) { uni.showToast({ title: `${title}能力已预留`,
 </script>
 
 <template>
+  <AuthBoundary>
   <view class="provider-page">
     <view class="provider-hero">
       <view class="top-nav">
@@ -48,6 +50,7 @@ function demo(title: string) { uni.showToast({ title: `${title}能力已预留`,
       </view>
     </view>
   </view>
+  </AuthBoundary>
 </template>
 
 <style scoped lang="scss">

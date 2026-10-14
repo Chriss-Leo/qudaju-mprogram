@@ -5,11 +5,12 @@ import FlowAvatar from "../../components/FlowAvatar.vue";
 import UiIcon from "../../components/UiIcon.vue";
 import { getGroup, meetupState, me, people, relationshipActive } from "../../stores/meetups";
 import { openFlow } from "../../utils/flow-navigation";
+import { isAuthenticated } from "../../stores/auth";
 const tab = ref("邀请");
 const tabs = ["聊天", "通知", "邀请"];
 const invites = computed(() => meetupState.invitations.filter(i => i.to === me.id).slice().reverse());
 const chats = computed(() => meetupState.invitations.filter(i => (i.to === me.id || i.from === me.id) && i.status === "accepted"));
-function select(value: string) { tab.value = value; if (value === "通知") meetupState.notificationsRead = true; }
+function select(value: string) { tab.value = value; if (value === "通知" && isAuthenticated.value) meetupState.notificationsRead = true; }
 function peer(id: string) { const i = meetupState.invitations.find(i => i.id === id)!; return people[i.from === me.id ? i.to : i.from]; }
 function lastMessage(id: string) { return meetupState.messages.filter(m => m.invitationId === id).slice(-1)[0]?.text || "聊天邀请已接受，可以开始交流。"; }
 </script>

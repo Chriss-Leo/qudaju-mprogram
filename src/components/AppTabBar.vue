@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { unreadCount } from "../stores/meetups";
+import { ensureLogin } from "../utils/auth-navigation";
+import { isAuthenticated } from "../stores/auth";
 type TabName = "home" | "discover" | "orders" | "profile";
 const props = defineProps<{ active: TabName; ownerRoute: string }>();
 const emit = defineEmits<{ (event: "discover"): void }>();
@@ -26,6 +28,7 @@ function home() {
   else uni.pageScrollTo({ scrollTop: 0, duration: 300 });
 }
 function discover() {
+  if (!ensureLogin(`/${props.ownerRoute}`)) return;
   emit("discover");
   if (props.active !== "home" && props.active !== "profile") uni.showToast({ title: "发布组局功能开发中", icon: "none" });
 }
@@ -50,7 +53,7 @@ function profile() {
     </button>
     <button class="tabbar__item" :class="{ active: active === 'profile' }" aria-label="我的" @tap="profile">
       <image :src="active === 'profile' ? '/static/entry/icons/profile.svg' : '/static/entry/icons/profile-muted.svg'" mode="aspectFit" />
-      <view v-if="unreadCount" class="tabbar__unread" :aria-label="`${unreadCount}条未读消息`" />
+      <view v-if="isAuthenticated && unreadCount" class="tabbar__unread" :aria-label="`${unreadCount}条未读消息`" />
       <text>我的</text>
     </button>
   </view>

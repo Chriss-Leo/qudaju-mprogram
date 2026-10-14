@@ -1,0 +1,18 @@
+server:
+  name: qudaju-identity
+  http_port: 8081
+  origins: []
+log:
+  level: info
+postgres:
+  dsn: ""
+  schema: qudaju_identity
+redis:
+  addr: 127.0.0.1:16379
+  password: ""
+  db: 0
+wechat:
+  app_id: ""
+  app_secret: ""
+auth:
+  session_ttl: 2h

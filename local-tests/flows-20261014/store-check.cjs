@@ -4,6 +4,10 @@ const ts = require('typescript');
 const assert = require('node:assert/strict');
 const vue = require('vue');
 const storage = new Map();
+// Test-only identity and fixtures; production login cannot be bypassed this way.
+const authState = vue.reactive({ session: null });
+const isAuthenticated = vue.computed(() => !!authState.session);
+const auth = { authState, isAuthenticated, assertAuthenticated() { assert.ok(isAuthenticated.value, 'login required'); } };
 function moduleAt(file, dependencies) {
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText;
   const module = { exports: {} };
@@ -12,12 +16,14 @@ function moduleAt(file, dependencies) {
 }
 function create() {
   const groups = moduleAt('src/mocks/group-cards.ts', {});
-  return moduleAt('src/stores/meetups.ts', { vue, '../mocks/group-cards': groups });
+  return moduleAt('src/stores/meetups.ts', { vue, '../mocks/group-cards': groups, './auth': auth });
 }
 (async () => {
   const s = create();
+  storage.set('qudaju-local-meetups-v2:fixture', JSON.parse(JSON.stringify(s.meetupState)));
+  authState.session = { user: { id: 'fixture', nickname: 'Test', avatarUrl: '' } };
   assert.equal(s.getGroup('__proto__'), undefined);
-  assert.equal(s.getGroup('outdoor-01').joined, 5);
+  assert.equal(s.getGroup('outdoor-01').joined, 6);
   assert.throws(() => s.requestInvitation('game-01', 'sample-1', 'hello'));
   assert.throws(() => s.requestInvitation('my-game', 'me', 'hello'));
   assert.throws(() => s.requestInvitation('my-game', 'not-registered', 'hello'));
@@ -35,7 +41,7 @@ function create() {
   assert.equal(s.canChat(invitation), false);
   assert.throws(() => s.sendMessage('invite-me', 'after withdrawal'));
   assert.equal(s.meetupState.messages.length, count);
-  assert.equal(s.getGroup('outdoor-01').joined, 4);
+  assert.equal(s.getGroup('outdoor-01').joined, 5);
   s.applyToGroup('outdoor-01', 'reapply');
   assert.equal(s.myRegistration('outdoor-01').status, 'joined');
   assert.equal(s.canChat(invitation), false, 'rejoining must not revive the old conversation');
@@ -55,7 +61,7 @@ function create() {
   const restored = create();
   assert.equal(restored.myRegistration('photo-01').status, 'joined');
   assert.equal(restored.myRegistration('outdoor-01').status, 'withdrawn');
-  storage.set('qudaju-local-meetups-v1', { version: 1, registrations: null });
-  assert.equal(create().myRegistration('outdoor-01').status, 'joined');
+  storage.set('qudaju-local-meetups-v2:fixture', { version: 2, registrations: null });
+  assert.equal(create().myRegistration('outdoor-01'), undefined);
   console.log('Local rules: ownership, relationship, invitation acceptance, message gating, withdrawal, payment seat count, host review, closure, persistence and corrupt storage fallback passed.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

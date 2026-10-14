@@ -5,6 +5,7 @@ export const createDemoAdapter = (name: PlatformAdapter["name"]): PlatformAdapte
   bootstrap() {
     uni.setStorageSync("qudaju-platform", name);
   },
+  async loginCode() { throw new Error("请在微信小程序中登录，此平台暂不支持微信登录"); },
   async requestPayment() {
     uni.showToast({ title: "支付能力将在联调阶段接入", icon: "none" });
   },

@@ -11,6 +11,11 @@ node_modules
 .DS_Store
 dist
 *.local
+.env
+.env.*
+!.env.example
+backend/**/config/*.local.yaml
+backend/**/identity-server
 
 # Editor directories and files
 .idea

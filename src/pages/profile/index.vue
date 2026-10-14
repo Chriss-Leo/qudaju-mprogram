@@ -6,17 +6,21 @@ import AppTabBar from "../../components/AppTabBar.vue";
 import SurfaceHeader from "../../components/SurfaceHeader.vue";
 import UiIcon from "../../components/UiIcon.vue";
 import { openFlow } from "../../utils/flow-navigation";
+import AuthBoundary from "../../components/AuthBoundary.vue";
+import { authState, logout } from "../../stores/auth";
+import { flowError } from "../../utils/flow-navigation";
 
 const avatarFailed = ref(false);
 const primaryLinks = [{ label: "我的报名", icon: "calendar" }, { label: "我发起的", icon: "launch" }];
 const compactLinks = [{ label: "我的收藏", icon: "favorite" }, { label: "费用记录", icon: "wallet" }];
 const utilityLinks = [{ label: "客服与帮助", icon: "support" }, { label: "设置", icon: "settings" }];
-function pending(label: string) { if (label === "我的报名") openFlow("my-registrations"); else if (label === "我发起的") openFlow("my-hosted"); else if (label === "消息") openFlow("messages"); else uni.showToast({ title: label + "尚未接入，当前为界面预览", icon: "none" }); }
+function pending(label: string) { if (label === "我的报名") openFlow("my-registrations"); else if (label === "我发起的") openFlow("my-hosted"); else if (label === "消息") openFlow("messages"); else if (label === "设置") uni.showActionSheet({ itemList: ['退出登录'], success: async result => { if (result.tapIndex === 0) try { await logout(); } catch (error) { flowError(error); } } }); else uni.showToast({ title: label + "尚未接入，当前为界面预览", icon: "none" }); }
 function publish() { uni.showToast({ title: "发布组局功能开发中", icon: "none" }); }
 onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor: theme.colors.white }));
 </script>
 
 <template>
+  <AuthBoundary next="/pages/profile/index">
   <view class="profile-page" data-design-contract="THESIS: layered identity, no service-shop grid. OWN-WORLD: white, blue utilities, orange primary. STORY: identity then participation. FIRST VIEWPORT: blue back card, curved white intro, meetup actions. FORM: user-approved A 2026-10-13. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md">
     <!-- THESIS: A layered identity card, open meetup actions, no legacy service-shop grid.
          OWN-WORLD: white, blue ordinary controls, orange primary actions; real text plus independent raster assets.
@@ -28,10 +32,10 @@ onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor:
       <view class="identity-card">
         <view class="identity-card__back">
           <view class="identity-card__person">
-            <image v-if="!avatarFailed" class="identity-card__avatar" src="/static/profile-a/profile-avatar.jpg" mode="aspectFill" aria-label="示例个人头像" @error="avatarFailed = true" />
-            <view v-else class="identity-card__avatar identity-card__fallback">周</view>
+            <image v-if="authState.session?.user.avatarUrl && !avatarFailed" class="identity-card__avatar" :src="authState.session.user.avatarUrl" mode="aspectFill" aria-label="个人头像" @error="avatarFailed = true" />
+            <view v-else class="identity-card__avatar identity-card__fallback">{{ authState.session?.user.nickname.slice(0, 1) || '友' }}</view>
             <view class="identity-card__name">
-              <text>周末探险家</text>
+              <text>{{ authState.session?.user.nickname || '微信用户' }}</text>
               <button class="edit-profile" @tap="pending('编辑资料')">编辑资料</button>
             </view>
           </view>
@@ -39,8 +43,8 @@ onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor:
         </view>
         <view class="identity-card__intro">
           <image class="identity-card__seam" src="/static/ui-icons/identity-seam.svg" mode="scaleToFill" aria-hidden="true" />
-          <text class="identity-card__bio">喜欢散步、桌游，也想认识新朋友。</text>
-          <view class="interest-tags"><text v-for="tag in ['桌游', '城市漫步', '陪拍']" :key="tag">{{ tag }}</text></view>
+          <text class="identity-card__bio">认识同频的人，发现同城好局。</text>
+          <text class="flow-muted">完善简介与兴趣，让局主更了解你。</text>
         </view>
       </view>
       <view class="profile-links">
@@ -56,10 +60,10 @@ onShow(() => uni.setNavigationBarColor({ frontColor: "#000000", backgroundColor:
           <UiIcon :name="item.icon" /><text>{{ item.label }}</text><view class="profile-link__chevron"><UiIcon name="chevron" tone="muted" /></view>
         </button>
       </view>
-      <text class="demo-note">示例资料 · 当前为界面预览</text>
     </view>
     <AppTabBar active="profile" owner-route="pages/profile/index" @discover="publish" />
   </view>
+  </AuthBoundary>
 </template>
 
 <style scoped lang="scss">
