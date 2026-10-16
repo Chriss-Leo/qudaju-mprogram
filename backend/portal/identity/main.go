@@ -58,7 +58,7 @@ func run() error {
 		ZH   string `gorm:"column:zh"`
 	}
 	var rows []language
-	if err = db.WithContext(ctx).Table("qudaju_base.base_language").Find(&rows).Error; err != nil || len(rows) == 0 {
+	if err = db.WithContext(ctx).Table("public.base_language").Find(&rows).Error; err != nil || len(rows) == 0 {
 		return errors.New("language resources missing; apply migrations first")
 	}
 	pipeline := client.TxPipeline()

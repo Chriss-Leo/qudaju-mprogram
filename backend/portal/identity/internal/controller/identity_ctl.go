@@ -16,7 +16,7 @@ func WeChatLogin(svc *service.IdentitySvc) gin.HandlerFunc {
 			request.Fail(c, errcode.ParameterError)
 			return
 		}
-		result, err := svc.Login(c.Request.Context(), input.Code)
+		result, err := svc.Login(c.Request.Context(), input.Code, input.PhoneCode)
 		if err != nil {
 			request.Fail(c, err)
 			return

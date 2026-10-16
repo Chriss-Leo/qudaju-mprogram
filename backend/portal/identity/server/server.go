@@ -16,12 +16,13 @@ import (
 type IdentityServer struct{ GSrv *gin.Engine }
 type Dependency struct {
 	IdentitySvc *service.IdentitySvc
+	ProfileSvc  *service.ProfileSvc
 	Ready       func(context.Context) error
 }
 
 func New(conf *config.Config, db *gorm.DB, redis redis.UniversalClient) starter.Server {
 	svc := service.NewIdentitySvc(repository.NewIdentityRepo(db), repository.NewSessionRepo(redis), rpc.NewWeChatClient(conf.WeChat.AppID, conf.WeChat.AppSecret), conf.WeChat.AppID, conf.Auth.TTL)
-	deps := Dependency{IdentitySvc: svc, Ready: func(ctx context.Context) error {
+	deps := Dependency{IdentitySvc: svc, ProfileSvc: &service.ProfileSvc{Users: repository.NewIdentityRepo(db), Profiles: repository.NewProfileRepo(db), AvatarDir: conf.Media.AvatarDir}, Ready: func(ctx context.Context) error {
 		sql, err := db.DB()
 		if err != nil {
 			return err

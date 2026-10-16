@@ -6,7 +6,7 @@ log:
   level: info
 postgres:
   dsn: ""
-  schema: qudaju_identity
+  schema: public
 redis:
   addr: 127.0.0.1:16379
   password: ""

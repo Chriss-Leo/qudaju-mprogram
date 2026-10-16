@@ -28,6 +28,7 @@ func RegisterApiRoutes(r *gin.Engine, deps *Dependency) {
 	{
 		protectedGroup.GET(api.AuthMe, middleware.ApiPermission("member"), controller.Me(deps.IdentitySvc))
 		protectedGroup.POST(api.AuthLogout, middleware.ApiPermission("member"), middleware.Audit("logout"), controller.Logout(deps.IdentitySvc))
+		protectedGroup.POST(api.AuthProfile, middleware.ApiPermission("member"), middleware.LoginRateLimit(deps.IdentitySvc.AllowLogin), middleware.Audit("profile_update"), controller.UpdateProfile(deps.ProfileSvc))
 	}
 	// health_ctl.go: infrastructure probes, no user data.
 	healthGroup := r.Group("")
@@ -35,6 +36,7 @@ func RegisterApiRoutes(r *gin.Engine, deps *Dependency) {
 		healthGroup.GET(api.HealthLive, controller.Live())
 		healthGroup.GET(api.HealthReady, controller.Ready(deps.Ready))
 	}
+	v1.GET(api.Avatar, controller.Avatar(deps.ProfileSvc))
 }
 func RegisterRemoteRoutes(r *gin.Engine, deps *Dependency) {
 	_ = deps

@@ -1,7 +1,8 @@
 package dto
 
 type WeChatLogin struct {
-	Code string `json:"code" binding:"required,min=1,max=256"`
+	Code      string `json:"code" binding:"required,min=1,max=256"`
+	PhoneCode string `json:"phoneCode" binding:"required,min=1,max=256"`
 }
 type User struct {
 	ID        string `json:"id"`

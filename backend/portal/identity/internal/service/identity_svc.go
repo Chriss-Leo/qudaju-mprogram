@@ -14,7 +14,7 @@ import (
 )
 
 type UserStore interface {
-	FindOrCreate(context.Context, string, string) (*model.User, error)
+	FindOrCreatePhone(context.Context, string, string, string) (*model.User, error)
 	ByID(context.Context, int64) (*model.User, error)
 }
 type SessionStore interface {
@@ -26,6 +26,7 @@ type SessionStore interface {
 }
 type WeChat interface {
 	Exchange(context.Context, string) (string, error)
+	Phone(context.Context, string) (string, error)
 }
 type IdentitySvc struct {
 	Users    UserStore
@@ -42,8 +43,10 @@ func safe(code string) error { return errs.NewBizError(nil, code) }
 func publicUser(user *model.User) dto.User {
 	return dto.User{ID: strconv.FormatInt(user.ID, 10), Nickname: user.Nickname, AvatarURL: user.AvatarURL}
 }
-func (s *IdentitySvc) Login(ctx context.Context, code string) (*dto.Login, error) {
-	if code == "" || len(code) > 256 {
+func (s *IdentitySvc) Login(ctx context.Context, code, phoneCode string) (*dto.Login, error) {
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+	if code == "" || len(code) > 256 || phoneCode == "" || len(phoneCode) > 256 {
 		return nil, safe(errcode.ParameterError)
 	}
 	claimed, err := s.Sessions.ClaimCode(ctx, code)
@@ -57,7 +60,18 @@ func (s *IdentitySvc) Login(ctx context.Context, code string) (*dto.Login, error
 	if err != nil || openID == "" {
 		return nil, safe(errcode.WeChatLoginFailed)
 	}
-	user, err := s.Users.FindOrCreate(ctx, s.AppID, openID)
+	claimed, err = s.Sessions.ClaimCode(ctx, "phone:"+phoneCode)
+	if err != nil {
+		return nil, safe(errcode.SystemBusy)
+	}
+	if !claimed {
+		return nil, safe(errcode.WeChatPhoneFailed)
+	}
+	phone, err := s.WeChat.Phone(ctx, phoneCode)
+	if err != nil || !verifiedPhoneShape.MatchString(phone) {
+		return nil, safe(errcode.WeChatPhoneFailed)
+	}
+	user, err := s.Users.FindOrCreatePhone(ctx, s.AppID, openID, phone)
 	if err != nil {
 		return nil, safe(errcode.SystemBusy)
 	}
@@ -76,6 +90,7 @@ func (s *IdentitySvc) Login(ctx context.Context, code string) (*dto.Login, error
 }
 
 var tokenShape = regexp.MustCompile(`^[A-Za-z0-9_-]{43}$`)
+var verifiedPhoneShape = regexp.MustCompile(`^\+[1-9][0-9]{6,14}$`)
 
 func (s *IdentitySvc) Me(ctx context.Context, token string) (*dto.User, error) {
 	if !tokenShape.MatchString(token) {

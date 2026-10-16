@@ -15,11 +15,12 @@ type testUsers struct {
 	creates int
 }
 
-func (u *testUsers) FindOrCreate(_ context.Context, appID, openID string) (*model.User, error) {
+func (u *testUsers) FindOrCreatePhone(_ context.Context, appID, openID, phone string) (*model.User, error) {
 	if appID != "test-app" || openID != "test-openid" {
 		return nil, errors.New("unexpected identity")
 	}
 	u.creates++
+	u.user.PhoneNumber = &phone
 	return &u.user, nil
 }
 func (u *testUsers) ByID(_ context.Context, id int64) (*model.User, error) {
@@ -76,7 +77,17 @@ func (s *testSessions) ClaimCode(_ context.Context, code string) (bool, error) {
 }
 func (s *testSessions) AllowLogin(context.Context, string) (bool, error) { return !s.fail, nil }
 
-type testWeChat struct{ fail bool }
+type testWeChat struct {
+	fail      bool
+	phoneFail bool
+}
+
+func (w testWeChat) Phone(context.Context, string) (string, error) {
+	if w.phoneFail {
+		return "", errors.New("sensitive phone body")
+	}
+	return "+8613800000000", nil
+}
 
 func (w testWeChat) Exchange(context.Context, string) (string, error) {
 	if w.fail {
@@ -92,7 +103,7 @@ func fixture() (*IdentitySvc, *testUsers, *testSessions) {
 func TestLoginSessionLogout(t *testing.T) {
 	svc, users, sessions := fixture()
 	ctx := context.Background()
-	login, err := svc.Login(ctx, "test-code")
+	login, err := svc.Login(ctx, "test-code", "phone-code")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -102,7 +113,7 @@ func TestLoginSessionLogout(t *testing.T) {
 	if login.User.ID != "9223372036854770000" {
 		t.Fatal("BIGINT must remain a decimal string")
 	}
-	if _, err = svc.Login(ctx, "test-code"); err == nil {
+	if _, err = svc.Login(ctx, "test-code", "phone-code"); err == nil {
 		t.Fatal("code replay accepted")
 	}
 	if users.creates != 1 {
@@ -122,7 +133,7 @@ func TestRejectFailureAndDisabled(t *testing.T) {
 	ctx := context.Background()
 	svc, users, sessions := fixture()
 	svc.WeChat = testWeChat{fail: true}
-	_, err := svc.Login(ctx, "failure-code")
+	_, err := svc.Login(ctx, "failure-code", "phone-failure")
 	if err == nil || strings.Contains(err.Error(), "sensitive") {
 		t.Fatal("failed login leaked cause or succeeded")
 	}
@@ -131,11 +142,11 @@ func TestRejectFailureAndDisabled(t *testing.T) {
 	}
 	svc.WeChat = testWeChat{}
 	users.user.Status = 0
-	if _, err = svc.Login(ctx, "disabled-code"); err == nil || len(sessions.tokens) != 0 {
+	if _, err = svc.Login(ctx, "disabled-code", "phone-disabled"); err == nil || len(sessions.tokens) != 0 {
 		t.Fatal("disabled user got session")
 	}
 	sessions.fail = true
-	if _, err = svc.Login(ctx, "redis-code"); err == nil {
+	if _, err = svc.Login(ctx, "redis-code", "phone-redis"); err == nil {
 		t.Fatal("redis failure opened login")
 	}
 	if _, err = svc.Me(ctx, strings.Repeat("a", 43)); err == nil {
@@ -151,7 +162,7 @@ func TestConcurrentCodeOnlyOnce(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if _, err := svc.Login(context.Background(), "one-code"); err == nil {
+			if _, err := svc.Login(context.Background(), "one-code", "phone-one"); err == nil {
 				mu.Lock()
 				success++
 				mu.Unlock()
@@ -161,5 +172,30 @@ func TestConcurrentCodeOnlyOnce(t *testing.T) {
 	wg.Wait()
 	if success != 1 || len(sessions.tokens) != 1 {
 		t.Fatal("concurrent replay issued sessions")
+	}
+}
+
+func TestPhoneRequiredAndRejectedBeforeUserWrite(t *testing.T) {
+	svc, users, sessions := fixture()
+	ctx := context.Background()
+	if _, err := svc.Login(ctx, "code-only", ""); err == nil {
+		t.Fatal("legacy code-only registration accepted")
+	}
+	svc.WeChat = testWeChat{phoneFail: true}
+	if _, err := svc.Login(ctx, "code-fail", "phone-fail"); err == nil || strings.Contains(err.Error(), "sensitive") {
+		t.Fatal("phone rejection succeeded or leaked")
+	}
+	if users.creates != 0 || len(sessions.tokens) != 0 {
+		t.Fatal("phone failure created account or token")
+	}
+	svc.WeChat = testWeChat{}
+	if _, err := svc.Login(ctx, "code-new", "phone-fail"); err == nil {
+		t.Fatal("phone code replay accepted")
+	}
+	if _, err := svc.Login(ctx, "code-ok", "phone-ok"); err != nil {
+		t.Fatal(err)
+	}
+	if users.user.PhoneNumber == nil || *users.user.PhoneNumber != "+8613800000000" {
+		t.Fatal("verified phone not persisted")
 	}
 }
