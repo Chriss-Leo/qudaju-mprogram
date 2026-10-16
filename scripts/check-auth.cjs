@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const vue = require('vue');
 class UnauthorizedError extends Error {}
 const storage = new Map();
-const api = { me: async () => user, login: async () => result, logout: async () => {} };
+const api = { me: async () => user, login: async (code, phoneCode) => { assert.equal(code, 'wx-code'); assert.equal(phoneCode, 'phone-code'); return result; }, logout: async () => {}, saveProfile: async () => ({ ...user, nickname: '小搭子', avatarUrl: 'https://example.com/avatar.jpg' }) };
 const user = { id: '42', nickname: '微信用户', avatarUrl: '' };
 const token = 'a'.repeat(43);
 const result = { accessToken: token, tokenType: 'Bearer', expiresIn: 7200, user };
@@ -30,8 +30,15 @@ const cache = () => storage.set(key, { accessToken: token, expiresAt: Date.now()
   const pending = auth.restoreAuth(); auth.clearAuth(); resolve(user);
   assert.equal(await pending, false); assert.equal(auth.isAuthenticated.value, false);
   api.me = async () => user;
-  await Promise.all([auth.wechatLogin(), auth.wechatLogin()]);
+  await assert.rejects(auth.wechatLogin('')); assert.equal(codeCalls, 0);
+  await Promise.all([auth.wechatLogin('phone-code'), auth.wechatLogin('phone-code')]);
   assert.equal(codeCalls, 1); assert.equal(auth.isAuthenticated.value, true);
+  await auth.saveMyProfile('小搭子', 'temp-avatar');
+  assert.equal(auth.authState.session.user.nickname, '小搭子');
+  let finishProfile; api.saveProfile = () => new Promise(resolve => { finishProfile = resolve; });
+  const saving = auth.saveMyProfile('另一个昵称', 'temp-avatar'); auth.clearAuth(); finishProfile({ ...user, nickname: '另一个昵称', avatarUrl: 'https://example.com/avatar.jpg' });
+  await assert.rejects(saving); assert.equal(auth.isAuthenticated.value, false, 'late profile save must not restore logged-out session');
+  await auth.wechatLogin('phone-code');
   await auth.logout(); assert.equal(auth.isAuthenticated.value, false);
   cache(); assert.equal(await auth.restoreAuth(), true);
   const groups = load('src/mocks/group-cards.ts', {});

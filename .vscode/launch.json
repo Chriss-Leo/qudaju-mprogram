@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "趣搭局后端 · identity（本地）",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/backend/portal/identity",
+      "cwd": "${workspaceFolder}/backend/portal/identity",
+      "env": {
+        "APP_ENV": "local",
+        "GOWORK": "off"
+      },
+      "args": [],
+      "console": "integratedTerminal"
+    }
+  ]
+}

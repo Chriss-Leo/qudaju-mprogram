@@ -16,6 +16,8 @@ dist
 !.env.example
 backend/**/config/*.local.yaml
 backend/**/identity-server
+backend/**/__debug_bin*
+backend/**/storage/
 
 # Editor directories and files
 .idea

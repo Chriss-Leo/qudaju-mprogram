@@ -75,6 +75,7 @@ watch(() => authState.session?.user.id, id => {
   me.nickname = authState.session?.user.nickname || '微信用户'; me.avatar = authState.session?.user.avatarUrl || '';
 }, { flush: 'sync', immediate: true });
 export const isMyHost = (id: string) => isAuthenticated.value && hostId(id) === me.id && meetupState.owned.includes(id);
+watch(() => authState.session?.user, user => { me.nickname = user?.nickname || '微信用户'; me.avatar = user?.avatarUrl || ''; }, { immediate: true, flush: 'sync' });
 export const myRegistration = (groupId: string) => isAuthenticated.value ? meetupState.registrations.find(r => r.groupId === groupId && r.userId === me.id) : undefined;
 export const isFormal = (status?: RegistrationStatus) => status === "joined" || status === "ongoing";
 export const effectiveStatus = (r: Registration): RegistrationStatus => meetupState.ended.includes(r.groupId) && isFormal(r.status) ? "ended" : r.status;

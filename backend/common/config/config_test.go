@@ -11,7 +11,7 @@ func TestSecretsRequired(t *testing.T) {
 	c.Server.Port = 8081
 	c.Auth.TTL = time.Hour
 	c.Postgres.DSN = "test-dsn"
-	c.Postgres.Schema = "qudaju_identity"
+	c.Postgres.Schema = "public"
 	c.Redis.Addr = "localhost:6379"
 	c.Log.Level = "info"
 	err := c.Validate()

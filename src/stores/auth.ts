@@ -49,13 +49,14 @@ export async function restoreAuth(): Promise<boolean> {
   })().finally(() => { validation = undefined; });
   return validation;
 }
-export async function wechatLogin(): Promise<void> {
+export async function wechatLogin(phoneCode: string): Promise<void> {
+  if (!phoneCode || phoneCode.length > 256) throw new Error("请先授权微信手机号");
   if (loginPending) return loginPending;
   const start = ++generation;
   loginPending = (async () => {
     requireIdentityURL();
     const code = await getPlatformAdapter().loginCode();
-    const result = await identityAPI.login(code);
+    const result = await identityAPI.login(code, phoneCode);
     if (generation !== start) return;
     if (result.tokenType !== "Bearer" || !Number.isInteger(result.expiresIn) || result.expiresIn < 60 || result.expiresIn > 86400) throw new Error("登录服务返回了无效会话");
     install({ accessToken: result.accessToken, expiresAt: Date.now() + result.expiresIn * 1000, user: result.user });
@@ -70,4 +71,13 @@ export async function logout() {
   try { if (token) await identityAPI.logout(token); }
   catch (error) { if (!(error instanceof UnauthorizedError)) throw new Error("已退出本机，服务端会话暂未能撤销；请检查网络"); }
   finally { clearAuth(); }
+}
+export async function saveMyProfile(nickname: string, avatarPath?: string) {
+  assertAuthenticated(); const session = authState.session!; const start = generation;
+  try {
+    const user = await identityAPI.saveProfile(session.accessToken, nickname, avatarPath);
+    if (generation !== start || authState.session?.accessToken !== session.accessToken) throw new Error("登录状态已变化，请重新登录");
+    if (user.id !== session.user.id) throw new Error("账号资料不匹配");
+    install({ ...session, user });
+  } catch (error) { if (error instanceof UnauthorizedError && generation === start) clearAuth(); throw error; }
 }

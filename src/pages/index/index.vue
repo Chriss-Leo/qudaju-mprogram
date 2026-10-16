@@ -34,7 +34,7 @@ function publish() { uni.showToast({ title: "发布组局功能开发中", icon:
       />
       <view class="entry-cover__shade" />
       <view class="entry-brand">
-        <image class="entry-brand__logo" src="/static/brand/qudaju-wordmark-white-orange-draft.png" mode="aspectFit" aria-label="趣搭局" />
+        <image class="entry-brand__logo" src="/static/brand/qudaju-wordmark-orange-ivory-v1.png" mode="aspectFit" aria-label="趣搭局" />
         <text class="entry-brand__tagline">好搭子 · 好时光</text>
       </view>
       <view class="entry-headline">
@@ -58,7 +58,7 @@ function publish() { uni.showToast({ title: "发布组局功能开发中", icon:
 .entry-cover__shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, $color-compatOverlay12, transparent 30%, transparent 52%, $color-compatOverlay13 72%, $color-compatOverlay14); }
 .entry-brand { position: absolute; left: 0; right: 0; top: 13%; display: flex; flex-direction: column; align-items: center; gap: 13rpx; color: $color-inverseWarm; }
 .entry-brand__logo { display: block; width: 380rpx; height: 100rpx; }
-.entry-brand__tagline { padding-left: 7rpx; font-size: $font-size-v27rpx; line-height: $line-height-v1p4; font-weight: $font-weight-v700; letter-spacing: 7rpx; color: $color-accent; }
+.entry-brand__tagline { padding-left: 7rpx; font-size: $font-size-v36rpx; line-height: $line-height-v1p4; font-weight: $font-weight-v700; letter-spacing: 7rpx; color: $color-accentForeground; }
 .entry-headline { position: absolute; top: 55%; left: 6.2%; right: 4%; color: $color-inverseWarm; font-family: $font-display; font-size: $font-size-v85rpx; font-weight: $font-weight-v350; line-height: $line-height-v1p23; letter-spacing: 0; }
 .entry-headline > text { display: block; }
 .entry-headline > view { display: flex; align-items: baseline; white-space: nowrap; }

@@ -4,6 +4,10 @@ const emit = defineEmits<{ close: [] }>();
 </script>
 
 <template>
+  <!-- H5 navigation is teleported to body; the modal must share that stacking context. -->
+  <!-- #ifdef H5 -->
+  <Teleport to="body">
+  <!-- #endif -->
   <view v-if="visible" class="sheet-layer" @touchmove.stop.prevent>
     <view class="sheet-layer__mask" @tap="emit('close')" />
     <view class="sheet">
@@ -15,6 +19,9 @@ const emit = defineEmits<{ close: [] }>();
       <slot />
     </view>
   </view>
+  <!-- #ifdef H5 -->
+  </Teleport>
+  <!-- #endif -->
 </template>
 
 <style scoped lang="scss">

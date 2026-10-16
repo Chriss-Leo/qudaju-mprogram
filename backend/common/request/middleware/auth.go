@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"github.com/Chriss-Leo/qudaju-mprogram/backend/common/api"
 	"github.com/Chriss-Leo/qudaju-mprogram/backend/common/consts/errcode"
 	"github.com/Chriss-Leo/qudaju-mprogram/backend/common/request"
 	"github.com/gin-gonic/gin"
@@ -75,7 +76,11 @@ func Audit(action string) gin.HandlerFunc {
 func RegisterMdl(r *gin.Engine, origins []string) {
 	r.Use(UnKnowErrorHandler())
 	r.Use(func(c *gin.Context) {
-		c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 4096)
+		limit := int64(4096)
+		if c.Request.Method == http.MethodPost && c.Request.URL.Path == "/v1"+api.AuthProfile {
+			limit = 3 << 20
+		}
+		c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, limit)
 		c.Header("Cache-Control", "no-store")
 		c.Header("X-Content-Type-Options", "nosniff")
 		origin := c.GetHeader("Origin")

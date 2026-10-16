@@ -35,6 +35,9 @@ type Config struct {
 	Auth struct {
 		TTL time.Duration `mapstructure:"session_ttl"`
 	} `mapstructure:"auth"`
+	Media struct {
+		AvatarDir string `mapstructure:"avatar_dir"`
+	} `mapstructure:"media"`
 }
 
 func Load() (*Config, error) {
@@ -51,8 +54,9 @@ func Load() (*Config, error) {
 	v.SetDefault("server.name", "qudaju-identity")
 	v.SetDefault("server.http_port", 8081)
 	v.SetDefault("log.level", "info")
-	v.SetDefault("postgres.schema", "qudaju_identity")
+	v.SetDefault("postgres.schema", "public")
 	v.SetDefault("auth.session_ttl", "2h")
+	v.SetDefault("media.avatar_dir", "./storage/avatars")
 	for key, name := range map[string]string{"server.http_port": "APP_HTTP_PORT", "postgres.dsn": "APP_POSTGRES_DSN", "redis.addr": "APP_REDIS_ADDR", "redis.password": "APP_REDIS_PASSWORD", "redis.db": "APP_REDIS_DB", "wechat.app_id": "APP_WECHAT_APP_ID", "wechat.app_secret": "APP_WECHAT_APP_SECRET", "auth.session_ttl": "APP_SESSION_TTL", "log.level": "APP_LOG_LEVEL"} {
 		if err := v.BindEnv(key, name); err != nil {
 			return nil, errors.New("configuration binding failed")
@@ -74,7 +78,7 @@ func (c *Config) Validate() error {
 	if c.Server.Port < 1 || c.Server.Port > 65535 || c.Auth.TTL < time.Minute || c.Auth.TTL > 24*time.Hour {
 		return errors.New("server port or session TTL invalid")
 	}
-	if strings.TrimSpace(c.Postgres.DSN) == "" || c.Postgres.Schema != "qudaju_identity" || c.Redis.Addr == "" || c.Redis.DB < 0 || c.Redis.DB > 15 {
+	if strings.TrimSpace(c.Postgres.DSN) == "" || c.Postgres.Schema != "public" || c.Redis.Addr == "" || c.Redis.DB < 0 || c.Redis.DB > 15 {
 		return errors.New("database/redis configuration missing or invalid")
 	}
 	if c.WeChat.AppID == "" || c.WeChat.AppSecret == "" {
