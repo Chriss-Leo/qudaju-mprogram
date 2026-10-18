@@ -13,10 +13,11 @@ let codeCalls = 0;
 function load(file, deps) {
   const compiled = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText;
   const module = { exports: {} };
-  vm.runInNewContext(compiled, { module, exports: module.exports, require: name => { if (!(name in deps)) throw Error(name); return deps[name]; }, uni: { getStorageSync: k => storage.get(k), setStorageSync: (k,v) => storage.set(k,v), removeStorageSync: k => storage.delete(k), showToast() {} }, Date, Math, console, setTimeout, clearTimeout });
+  vm.runInNewContext(compiled, { module, exports: module.exports, require: name => { if (!(name in deps)) throw Error(name); return deps[name]; }, uni: { getStorageSync: k => storage.get(k), setStorageSync: (k,v) => storage.set(k,v), removeStorageSync: k => storage.delete(k), showToast() {}, showLoading() {}, hideLoading() {} }, Date, Math, console, setTimeout, clearTimeout });
   return module.exports;
 }
-const auth = load('src/stores/auth.ts', { vue, '../api/identity': { identityAPI: api, UnauthorizedError, validUser: u => !!u && /^\d+$/.test(u.id) && typeof u.nickname === 'string' && typeof u.avatarUrl === 'string' }, '../platforms': { getPlatformAdapter: () => ({ loginCode: async () => { codeCalls++; return 'wx-code'; } }) }, '../config/identity': { requireIdentityURL() {} } });
+const loading = load('src/utils/loading.ts', {});
+const auth = load('src/stores/auth.ts', { '../utils/loading': loading, vue, '../api/identity': { identityAPI: api, UnauthorizedError, validUser: u => !!u && /^\d+$/.test(u.id) && typeof u.nickname === 'string' && typeof u.avatarUrl === 'string' }, '../platforms': { getPlatformAdapter: () => ({ loginCode: async () => { codeCalls++; return 'wx-code'; } }) }, '../config/identity': { requireIdentityURL() {} } });
 const key = 'qudaju-auth-session-v1';
 const cache = () => storage.set(key, { accessToken: token, expiresAt: Date.now()+7200000, user });
 (async () => {

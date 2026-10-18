@@ -71,7 +71,7 @@ async function submit(event: unknown) {
         </label>
         <text class="nickname-hint">点击昵称输入框，可选用微信昵称，也可以修改。</text>
         <text v-if="error" class="profile-error" role="alert">{{ error }}</text>
-        <button class="profile-save action-accent" form-type="submit" :disabled="busy" :loading="busy">{{ busy ? '正在保存' : '确认并继续' }}</button>
+        <button class="profile-save action-accent" form-type="submit" :disabled="busy">确认并继续</button>
         <text class="profile-privacy">头像与昵称由你主动提供，可在「我的 → 编辑资料」修改。</text>
       </view></form>
   </BottomSheet>

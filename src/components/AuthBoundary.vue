@@ -16,7 +16,7 @@ function login() { openLogin(next.value); }
 onShow(async () => { if (!await restoreAuth()) login(); });
 watch(isAuthenticated, (value, previous) => { if (!value && previous) login(); });
 </script>
-<template><slot v-if="isAuthenticated" /><view v-else class="auth-block"><text>{{ authState.status === 'checking' ? '正在验证登录状态' : '登录后继续' }}</text><text>使用微信登录，管理你的报名、发布与消息。</text><button v-if="authState.status !== 'checking'" class="auth-block__button action-accent" @tap="login">微信登录</button></view></template>
+<template><slot v-if="isAuthenticated" /><view v-else-if="authState.status !== 'checking'" class="auth-block"><text>登录后继续</text><text>使用微信登录，管理你的报名、发布与消息。</text><button class="auth-block__button action-accent" @tap="login">微信登录</button></view></template>
 <style scoped lang="scss">
 .auth-block { min-height: 100vh; padding: calc(120rpx + env(safe-area-inset-top)) 40rpx 40rpx; background: $color-white; color: $color-text; text-align: center; }
 .auth-block > text:first-child { display: block; font-size: $font-size-v38rpx; font-weight: $font-weight-v600; line-height: $line-height-v1p4; }

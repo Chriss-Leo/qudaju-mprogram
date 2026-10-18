@@ -3,11 +3,13 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { unreadCount } from "../stores/meetups";
 import { ensureLogin } from "../utils/auth-navigation";
 import { isAuthenticated } from "../stores/auth";
+import { withNativeLoading } from "../utils/loading";
 type TabName = "home" | "discover" | "orders" | "profile";
 const props = defineProps<{ active: TabName; ownerRoute: string }>();
 const emit = defineEmits<{ (event: "discover"): void }>();
 const safeBottom = uni.getWindowInfo().safeAreaInsets?.bottom || 0;
 const isVisible = ref(true);
+const publishing = ref(false);
 // H5 teleport escapes the hidden page's DOM; keep only the current page's bar.
 // #ifdef H5
 function syncVisibility() {
@@ -27,10 +29,18 @@ function home() {
   if (props.active !== "home") uni.redirectTo({ url: "/pages/index/index" });
   else uni.pageScrollTo({ scrollTop: 0, duration: 300 });
 }
-function discover() {
-  if (!ensureLogin(`/${props.ownerRoute}`)) return;
-  emit("discover");
-  if (props.active !== "home" && props.active !== "profile") uni.showToast({ title: "发布组局功能开发中", icon: "none" });
+async function discover() {
+  if (publishing.value) return;
+  publishing.value = true;
+  try {
+    // Temporary preview of the platform's native loading indicator.
+    await withNativeLoading("加载中", () => new Promise<void>(resolve => setTimeout(resolve, 3000)));
+    if (!ensureLogin(`/${props.ownerRoute}`)) return;
+    emit("discover");
+    if (props.active !== "home" && props.active !== "profile") uni.showToast({ title: "发布组局功能开发中", icon: "none" });
+  } finally {
+    publishing.value = false;
+  }
 }
 function profile() {
   if (props.active !== "profile") uni.redirectTo({ url: "/pages/profile/index" });
@@ -47,7 +57,7 @@ function profile() {
       <image :src="active === 'home' ? '/static/entry/icons/home.svg' : '/static/entry/icons/home-muted.svg'" mode="aspectFit" />
       <text>首页</text>
     </button>
-    <button class="tabbar__item tabbar__discover" aria-label="发现同城活动" @tap="discover">
+    <button class="tabbar__item tabbar__discover" :disabled="publishing" aria-label="发现同城活动" @tap="discover">
       <view class="tabbar__plus"><image src="/static/entry/icons/plus.svg" mode="aspectFit" /></view>
       <text>发布</text>
     </button>

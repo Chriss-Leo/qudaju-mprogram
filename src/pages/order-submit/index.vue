@@ -62,7 +62,7 @@ async function submitOrder() {
 
     <view class="submit-bar">
       <view><text>合计</text><text>¥{{ service.price }}</text></view>
-      <button :loading="submitting" @tap="submitOrder">微信/平台支付</button>
+      <button :disabled="submitting" @tap="submitOrder">微信/平台支付</button>
     </view>
   </view>
   </AuthBoundary>

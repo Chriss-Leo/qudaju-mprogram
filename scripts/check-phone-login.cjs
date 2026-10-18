@@ -3,7 +3,7 @@ const vm = require('node:vm');
 const ts = require('typescript');
 const assert = require('node:assert/strict');
 const source = fs.readFileSync('src/pages/login/index.vue', 'utf8');
-const script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
+const script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1].replaceAll('import.meta.env.DEV', 'true');
 const compiled = ts.transpileModule(script + '\nexport { onGetPhoneNumber, busy, error };', {compilerOptions: {module: ts.ModuleKind.CommonJS}}).outputText;
 const calls = [], redirects = [];
 let fail = false, finish;
@@ -14,12 +14,19 @@ const deps = {
   '../../stores/auth': {isAuthenticated: {value: true}, wechatLogin: async code => {calls.push(code); if (fail) throw Error('登录失败'); await new Promise(resolve => {finish = resolve;});}},
 };
 const moduleObject = {exports: {}};
-vm.runInNewContext(compiled, {module: moduleObject, exports: moduleObject.exports, Error, require: name => {assert.ok(name in deps); return deps[name];}, uni: {redirectTo: value => redirects.push(value), reLaunch() {}}});
+vm.runInNewContext(compiled, {module: moduleObject, exports: moduleObject.exports, Error, console: {warn() {}}, require: name => {assert.ok(name in deps); return deps[name];}, uni: {redirectTo: value => redirects.push(value), reLaunch() {}}});
 const page = moduleObject.exports;
 (async () => {
   for (const detail of [{errMsg: 'getPhoneNumber:fail user deny'}, {errMsg: 'getPhoneNumber:fail cancel'}, {errMsg: 'getPhoneNumber:ok'}]) {
     await page.onGetPhoneNumber({detail}); assert.equal(calls.length, 0); assert.equal(redirects.length, 0); assert.ok(page.error.value);
   }
+  await page.onGetPhoneNumber({detail: {errMsg: 'getPhoneNumber:fail no permission', errno: 102}});
+  assert.match(page.error.value, /没有获取手机号的权限/);
+  assert.match(page.error.value, /102/);
+  assert.equal(calls.length, 0);
+  await page.onGetPhoneNumber({detail: {errMsg: 'getPhoneNumber:ok'}});
+  assert.match(page.error.value, /未返回手机号授权凭证/);
+  assert.equal(calls.length, 0);
   const login = page.onGetPhoneNumber({detail: {errMsg: 'getPhoneNumber:ok', code: 'native-phone-code'}});
   assert.equal(page.busy.value, true);
   await page.onGetPhoneNumber({detail: {errMsg: 'getPhoneNumber:ok', code: 'duplicate'}});

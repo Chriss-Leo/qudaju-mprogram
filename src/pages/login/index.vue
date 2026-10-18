@@ -8,11 +8,25 @@ import { safeReturnURL } from "../../utils/auth-navigation";
 const next = ref("/pages/profile/index"); const busy = ref(false); const error = ref("");
 onLoad(query => { next.value = safeReturnURL(String(query?.next || "/pages/profile/index")); });
 function back() { uni.reLaunch({ url: "/pages/index/index" }); }
-async function onGetPhoneNumber(event: { detail?: { code?: string; errMsg?: string } }) {
+async function onGetPhoneNumber(event: { detail?: { code?: string; errMsg?: string; errno?: number } }) {
   if (busy.value) return;
   const detail = event.detail;
   if (!detail?.code || detail.errMsg !== "getPhoneNumber:ok") {
-    error.value = detail?.errMsg?.includes("deny") || detail?.errMsg?.includes("cancel") ? "你已取消手机号授权，可以继续浏览，或再次点击登录。" : "未能获取手机号授权，请重试，并确认小程序已开通手机号能力。";
+    const message = detail?.errMsg || "";
+    if (/deny|cancel/i.test(message)) {
+      error.value = "你已取消手机号授权，可以继续浏览，或再次点击登录。";
+    } else if (/no permission|no privilege|permission denied/i.test(message) || detail?.errno === 102) {
+      error.value = "当前小程序没有获取手机号的权限，请检查当前 AppID 的手机号能力。";
+    } else if (message === "getPhoneNumber:ok" && !detail?.code) {
+      error.value = "微信未返回手机号授权凭证，请使用新版微信真机重试。";
+    } else {
+      error.value = "未能获取手机号授权，请重试，并确认小程序已开通手机号能力。";
+    }
+    // Only platform diagnostics: never log the event, phone code, or encrypted data.
+    if (import.meta.env.DEV) {
+      console.warn("[wechat-phone] native authorization failed", { errMsg: message, errno: detail?.errno, hasCode: !!detail?.code });
+      error.value += `（${message || "无错误详情"}${detail?.errno !== undefined ? `；错误码 ${detail.errno}` : ""}）`;
+    }
     return;
   }
   busy.value = true; error.value = "";
@@ -32,8 +46,8 @@ function unsupportedLogin() { error.value = "请在微信小程序中使用手�
       </view>
       <text class="login-description">登录后发布组局、申请报名，<br />管理你的活动与聊天邀请。</text>
       <!-- #ifdef MP-WEIXIN -->
-      <button class="login-action action-accent" open-type="getPhoneNumber" :disabled="busy" :loading="busy" @getphonenumber="onGetPhoneNumber">
-        <view class="login-action__content"><uni-icons class="login-action__wechat" type="weixin" size="46rpx" :color="theme.colors.accentForeground" aria-hidden="true" /><text>{{ busy ? '正在登录' : '微信手机号一键登录' }}</text></view>
+      <button class="login-action action-accent" open-type="getPhoneNumber" :disabled="busy" @getphonenumber="onGetPhoneNumber">
+        <view class="login-action__content"><uni-icons class="login-action__wechat" type="weixin" size="46rpx" :color="theme.colors.accentForeground" aria-hidden="true" /><text>微信手机号一键登录</text></view>
       </button>
       <!-- #endif -->
       <!-- #ifndef MP-WEIXIN -->
